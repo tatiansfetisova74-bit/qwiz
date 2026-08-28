@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Какое направление заработка тебе подходит — узнай за 2 минуты</title>
+<style>
+  :root {
+    --bg: #ecdfcd;
+    --card: #fffbf4;
+    --accent: #a97558;
+    --accent2: #cc9a63;
+    --accent-dark: #7c5540;
+    --text: #3a2f26;
+    --muted: #7d6c5a;
+    --border: #e2d2b8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(204,154,99,0.28), transparent 40%),
+      radial-gradient(circle at 88% 12%, rgba(169,117,88,0.20), transparent 42%),
+      radial-gradient(circle at 20% 92%, rgba(169,117,88,0.18), transparent 38%),
+      radial-gradient(circle at 92% 88%, rgba(204,154,99,0.24), transparent 40%),
+      linear-gradient(160deg, #f2e6d3, #e4d2b6 55%, #d9c4a3);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    padding: 24px 12px;
+    min-height: 100vh;
+  }
+  .card {
+    position: relative;
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: 0 10px 34px rgba(124,85,64,0.14), 0 2px 8px rgba(0,0,0,0.04);
+    max-width: 480px;
+    width: 100%;
+    padding: 28px 22px 24px;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent2));
+  }
+  .hero-art {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 4px 0 16px;
+  }
+  .hero-art::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 110px;
+    background: radial-gradient(circle, rgba(204,154,99,0.55), transparent 70%);
+    filter: blur(6px);
+    z-index: 0;
+  }
+  .hero-art svg { position: relative; z-index: 1; }
+  .spark {
+    animation: sparkPulse 2.6s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .spark:nth-child(3) { animation-delay: .3s; }
+  .spark:nth-child(4) { animation-delay: .9s; }
+  .spark:nth-child(5) { animation-delay: .5s; }
+  @keyframes sparkPulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+  .icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f0dcc0, #e8c9a0);
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+  .option.checked .icon-circle {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+  }
+  .step { display: none; }
+  .step.active { display: block; animation: fade 0.25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+
+  h1 { font-size: 1.55rem; line-height: 1.3; margin: 0 0 12px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.3rem; line-height: 1.3; margin: 0 0 14px; letter-spacing: -0.01em; }
+  p { font-size: 0.95rem; line-height: 1.5; color: var(--muted); margin: 0 0 16px; }
+  .badge {
+    display: inline-block;
+    background: #ecdec4;
+    color: var(--accent-dark);
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s;
+  }
+  .option:active { background: #f3e6d0; }
+  .option.checked {
+    border-color: var(--accent);
+    background: #f3e6d0;
+    box-shadow: 0 4px 14px rgba(169,117,88,0.20);
+    transform: translateY(-1px);
+  }
+  .option input { margin: 0; accent-color: var(--accent); flex-shrink: 0; }
+
+  label.field-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+  }
+  textarea {
+    width: 100%;
+    min-height: 78px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    line-height: 1.4;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 16px;
+    background: #fffaf1;
+    color: var(--text);
+  }
+  textarea:focus { outline: none; border-color: var(--accent); }
+
+  .btn {
+    display: inline-block;
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent), var(--accent2));
+    background-size: 220% auto;
+    background-position: 0% center;
+    box-shadow: 0 4px 14px rgba(169,117,88,0.30);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    animation: btnShimmer 3.5s ease-in-out infinite;
+  }
+  @keyframes btnShimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+  }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; animation: none; }
+  .btn:active:not(:disabled) { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); }
+  .btn.secondary {
+    background: transparent;
+    color: var(--accent-dark);
+    border: 1.5px solid var(--border);
+    margin-top: 10px;
+  }
+
+  .progress {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .progress-dot {
+    height: 4px;
+    flex: 1;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-dot.filled { background: linear-gradient(90deg, var(--accent2), var(--accent)); }
+
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .result-block {
+    position: relative;
+    background: #f3e6d0;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px 16px 50px;
+    margin-bottom: 16px;
+    font-size: 0.93rem;
+    line-height: 1.6;
+    box-shadow: 0 8px 22px rgba(124,85,64,0.28);
+    opacity: 0;
+    animation: resultPop 0.45s ease forwards;
+  }
+  .result-block:nth-of-type(1) { animation-delay: .05s; }
+  .result-block:nth-of-type(2) { animation-delay: .15s; }
+  .result-block:nth-of-type(3) { animation-delay: .25s; }
+  .result-block:nth-of-type(4) { animation-delay: .35s; }
+  .result-block:nth-of-type(5) { animation-delay: .45s; }
+  .result-block:nth-of-type(6) { animation-delay: .55s; }
+  @keyframes resultPop {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .result-block .r-icon {
+    position: absolute;
+    left: 14px;
+    top: 15px;
+    font-size: 1.2rem;
+  }
+  .result-block b { display: block; margin-bottom: 4px; color: var(--accent-dark); }
+  #result-plan div { margin-bottom: 6px; }
+  #result-plan div:last-child { margin-bottom: 0; }
+  .footer-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .author-heading {
+    margin: 18px 0 12px;
+    padding-top: 16px;
+    border-top: 1.5px solid var(--border);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 14px;
+  }
+  .author-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(169,117,88,0.30);
+    overflow: hidden;
+  }
+  .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .author-name { font-weight: 700; margin-bottom: 3px; }
+  .author-bio { font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
+  .author-benefits { margin: 4px 0 16px; }
+  .benefit-item { font-size: 0.88rem; color: var(--text); line-height: 1.5; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ШАГ 0: ОНБОРДИНГ -->
+  <div class="step active" data-step="0">
+    <div class="hero-art">
+      <svg width="140" height="90" viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 70C24 70 24 40 42 40C60 40 60 60 78 60C96 60 96 22 114 22C124 22 130 26 134 30" stroke="url(#g1)" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="134" cy="30" r="7" fill="url(#g1)"/>
+        <circle class="spark" cx="20" cy="18" r="4" fill="#e8c9a0"/>
+        <circle class="spark" cx="60" cy="12" r="3" fill="#cc9a63" opacity="0.7"/>
+        <circle class="spark" cx="100" cy="70" r="5" fill="#e8c9a0"/>
+        <defs>
+          <linearGradient id="g1" x1="6" y1="70" x2="134" y2="22" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#cc9a63"/>
+            <stop offset="1" stop-color="#a97558"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <span class="badge">⏱ 2 минуты, без регистрации</span>
+    <h1>Узнай, какое направление заработка тебе подходит уже сейчас</h1>
+    <p>
+      Не нужно становиться айтишником и ничего бросать. Ответь на несколько вопросов о себе — и узнаешь:
+    </p>
+    <p>
+      • какие профессии, задачи и темы тебе ближе всего по опыту, интересам и стилю жизни<br>
+      • какая модель заработка с ИИ подойдёт тебе лучше всего<br>
+      • что можно протестировать уже за 3 дня, чтобы получить первых клиентов или первые деньги
+    </p>
+    <button class="btn" onclick="goToStep(1)">Начать</button>
+  </div>
+
+  <!-- ШАГ 1: ОТКРЫТЫЕ ВОПРОСЫ О СЕБЕ -->
+  <div class="step" data-step="1">
+    <div class="progress">
+      <div class="progress-dot filled"></div><div class="progress-dot"></div>
+      <div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div>
+    </div>
+    <h2>Пару слов о тебе</h2>
+    <label class="field-label" for="f-skills">Что у тебя получается лучше всего?</label>
+    <textarea id="f-skills" rows="3" placeholder="Например: наводить порядок в делах, объяснять сложное простыми словами"></textarea>
+
+    <label class="field-label" for="f-experience">Какой у тебя опыт?</label>
+    <textarea id="f-experience" rows="3" placeholder="Например: 15 лет в продажах, или просто «делаю это для семьи и друзей уже много лет»"></textarea>
+
+    <label class="field-label" for="f-useful">Кому это может быть полезно?</label>
+    <textarea id="f-useful" rows="3" placeholder="Например: занятым мамам, начинающим предпринимателям, тем, кто готовится к переезду"></textarea>
+
+    <label class="field-label" for="f-tasks">Какие задачи ты можешь решать?</label>
+    <textarea id="f-tasks" rows="4" style="min-height:100px;" placeholder="Например: навести порядок в делах, подготовить к сложному разговору, сделать красиво к празднику"></textarea>
+
+    <button class="btn" id="btn0" disabled onclick="goToStep(2)">Дальше</button>
+  </div>
+
+  <!-- ШАГ 2 -->
+  <div class="step" data-step="2">
+    <div class="progress">
+      <div class="progress-dot filled"></div><div class="progress-dot filled"></div>
+      <div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div>
+    </div>
+    <h2>Что из этого ближе всего к тому, что ты умеешь?</h2>
+    <div id="q1" class="options"></div>
+    <button class="btn" id="btn1" disabled onclick="goToStep(3)">Дальше</button>
+    <button class="btn secondary" onclick="goToStep(1)">Назад</button>
+  </div>
+
+  <!-- ШАГ 3 -->
+  <div class="step" data-step="3">
+    <div class="progress">
+      <div class="progress-dot filled"></div><div class="progress-dot filled"></div>
+      <div class="progress-dot filled"></div><div class="progress-dot"></div><div class="progress-dot"></div>
+    </div>
+    <h2>Что тебе интереснее всего пробовать?</h2>
+    <div id="q2" class="options"></div>
+    <button class="btn" id="btn2" disabled onclick="goToStep(4)">Дальше</button>
+    <button class="btn secondary" onclick="goToStep(2)">Назад</button>
+  </div>
+
+  <!-- ШАГ 4 -->
+  <div class="step" data-step="4">
+    <div class="progress">
+      <div class="progress-dot filled"></div><div class="progress-dot filled"></div>
+      <div class="progress-dot filled"></div><div class="progress-dot filled"></div><div class="progress-dot"></div>
+    </div>
+    <h2>Сколько времени в неделю реально готова уделять?</h2>
+    <div id="q3" class="options"></div>
+    <button class="btn" id="btn3" disabled onclick="goToStep(5)">Дальше</button>
+    <button class="btn secondary" onclick="goToStep(3)">Назад</button>
+  </div>
+
+  <!-- ШАГ 5 -->
+  <div class="step" data-step="5">
+    <div class="progress">
+      <div class="progress-dot filled"></div><div class="progress-dot filled"></div>
+      <div class="progress-dot filled"></div><div class="progress-dot filled"></div><div class="progress-dot filled"></div>
+    </div>
+    <h2>Насколько комфортно чувствуешь себя с новыми программами и технологиями?</h2>
+    <div id="q4" class="options"></div>
+    <button class="btn" id="btn4" disabled onclick="showResult()">Показать результат</button>
+    <button class="btn secondary" onclick="goToStep(4)">Назад</button>
+  </div>
+
+  <!-- РЕЗУЛЬТАТ -->
+  <div class="step" data-step="6">
+    <span class="result-badge" id="result-name"></span>
+    <h2 id="result-title"></h2>
+    <div class="result-block" id="result-about-block" style="display:none;"><span class="r-icon">📝</span><b>Ты написала о себе</b><span id="result-about"></span></div>
+    <div class="result-block"><span class="r-icon">💪</span><b>Сильные стороны и интересы</b><span id="result-strengths"></span></div>
+    <div class="result-block"><span class="r-icon">🧭</span><b>Подходящие направления</b><span id="result-direction"></span></div>
+    <div class="result-block"><span class="r-icon">💡</span><b>Наиболее подходящая модель заработка</b><span id="result-model"></span></div>
+    <div class="result-block"><span class="r-icon">🛠️</span><b>Пример продукта или услуги</b><span id="result-product"></span></div>
+    <div class="result-block"><span class="r-icon">💰</span><b>Примерный средний чек</b><span id="result-price"></span></div>
+    <div class="result-block"><span class="r-icon">🎯</span><b>Кто твои потенциальные клиенты</b><span id="result-clients"></span></div>
+    <div class="result-block"><span class="r-icon">📅</span><b>План действий на ближайшие 3 дня</b>
+      <div id="result-plan"></div>
+      <div id="result-timenote" style="margin-top:8px; font-style: italic;"></div>
+    </div>
+    <p class="footer-note">
+      Это общее направление под твой тип. Если хочешь разобрать свою ситуацию подробно — с учётом графика, финансов и конкретно твоей истории — просто напиши мне "привет" в Telegram. Ничего продавать не буду, обсудим бесплатно.
+    </p>
+    <h3 class="author-heading">Кто я и чем я могу тебе помочь</h3>
+    <div class="author-card">
+      <div class="author-avatar" id="author-avatar"><img src="data:image/jpeg;base64,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" alt="Татьяна Фетисова"></div>
+      <div>
+        <div class="author-name">Татьяна Фетисова</div>
+        <div class="author-bio">28 лет в продажах, несколько лет назад начала строить своё дело с нуля — сайты, реклама, боты, а сейчас ИИ и автоворонки. Всё, что показываю, — то, что прошла сама.</div>
+      </div>
+    </div>
+    <div class="author-benefits">
+      <div class="benefit-item">✅ Разберём именно твою ситуацию и опыт — не по шаблону</div>
+      <div class="benefit-item">✅ Покажу, как применить то, что у тебя уже есть, уже сейчас</div>
+      <div class="benefit-item">✅ Расскажу про формат, где твой опыт может приносить доход — без обязательств, просто поговорим</div>
+    </div>
+    <a class="btn" href="https://t.me/fetisovatatiana" target="_blank" rel="noopener" style="margin-top:6px;">Написать в Telegram →</a>
+  </div>
+
+</div>
+
+<script>
+  const Q1 = [
+    { v: 'org', icon: '📋', label: 'Порядок и организация — отчётность, планирование, ведение дел' },
+    { v: 'people', icon: '💬', label: 'Общение с людьми — продажи, консультации, поддержка' },
+    { v: 'hands', icon: '🎨', label: 'Руки и творчество — рукоделие, готовка, декор, дизайн' },
+    { v: 'teach', icon: '🎓', label: 'Обучение других — объясняешь, натаскиваешь, наставляешь' }
+  ];
+  const Q2 = [
+    { v: 'deepen', icon: '🔍', label: 'Углубиться в то, что уже умею, но по-новому' },
+    { v: 'help1on1', icon: '🤝', label: 'Помогать другим один на один' },
+    { v: 'make', icon: '✋', label: 'Делать и создавать что-то своими руками' },
+    { v: 'tech', icon: '🤖', label: 'Разбираться в новых инструментах, в том числе ИИ' }
+  ];
+  const Q3 = [
+    { v: 't1', icon: '⏳', label: '3-5 часов в неделю' },
+    { v: 't2', icon: '🕓', label: '5-10 часов в неделю' },
+    { v: 't3', icon: '⏰', label: '10-15 часов в неделю' },
+    { v: 't4', icon: '🚀', label: 'Больше 15 часов в неделю' }
+  ];
+  const Q4 = [
+    { v: 'low', icon: '🌱', label: 'Не очень — новое даётся не сразу' },
+    { v: 'mid', icon: '🌿', label: 'Нормально — разберусь, если понадобится' },
+    { v: 'high', icon: '🌳', label: 'Легко — люблю пробовать новое' }
+  ];
+
+  const answers = {};
+
+  function renderOptions(containerId, items, groupName, btnId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = items.map((item, i) => `
+      <label class="option" data-value="${item.v}">
+        <input type="radio" name="${groupName}" value="${item.v}">
+        <span class="icon-circle">${item.icon}</span>
+        <span>${item.label}</span>
+      </label>
+    `).join('');
+    container.querySelectorAll('.option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        container.querySelectorAll('.option').forEach(o => o.classList.remove('checked'));
+        opt.classList.add('checked');
+        opt.querySelector('input').checked = true;
+        answers[groupName] = opt.dataset.value;
+        document.getElementById(btnId).disabled = false;
+      });
+    });
+  }
+
+  renderOptions('q1', Q1, 'skill', 'btn1');
+  renderOptions('q2', Q2, 'interest', 'btn2');
+  renderOptions('q3', Q3, 'time', 'btn3');
+  renderOptions('q4', Q4, 'tech', 'btn4');
+
+  const step1Fields = ['f-skills', 'f-experience', 'f-useful', 'f-tasks'].map(id => document.getElementById(id));
+  const btn0 = document.getElementById('btn0');
+  function checkStep1() {
+    btn0.disabled = !step1Fields.every(el => el.value.trim().length > 0);
+  }
+  step1Fields.forEach(el => el.addEventListener('input', checkStep1));
+
+  function goToStep(n) {
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.querySelector('.step[data-step="' + n + '"]').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  const PORTRAITS = {
+    org: {
+      icon: '📋',
+      name: 'Организатор',
+      title: 'Твоё направление — наводить порядок в чужих делах',
+      strengths: 'Собранность, внимание к деталям, умение навести систему там, где для других — хаос. Это годами наработанный навык — он не устаревает, и начинать с ним заново не поздно в любом возрасте.',
+      direction: 'Услуга организации и ведения дел: расписание, документы, переписка, задачи — то, за что люди готовы платить, потому что им не хватает не идей, а порядка.',
+      altDirection: 'Второй вариант — офис-поддержка небольших предпринимателей: берёшь на себя рутину, а человек освобождает время для того, что реально приносит ему деньги.',
+      product: 'Услуга бизнес-ассистента или помощника по организации: ведение расписания, документов, переписки, задач для предпринимателя или занятого человека. ИИ ускоряет рутину (шаблоны писем, сводки, планирование), но продаёшь ты — свою собранность.',
+      clients: 'Предприниматели, фрилансеры, специалисты на себя — те, у кого дел больше, чем рук, и кто готов платить за освобождённое время.',
+      price: 'Разовая помощь с одним блоком дел — ориентир 1500-3000 ₽. Первый раз часто имеет смысл сделать бесплатно или за отзыв, дальше — по рынку.',
+      plan: [
+        'День 1: напиши знакомым лично (не постом) — есть ли у кого-то хаос в делах, которому нужна помощь.',
+        'День 2: договорись с одним человеком о бесплатной или пробной помощи за отзыв.',
+        'День 3: наведи порядок в одном конкретном блоке (например, расписании или переписке) и попроси честный отзыв.'
+      ]
+    },
+    people: {
+      icon: '💬',
+      name: 'Коммуникатор',
+      title: 'Твоё направление — работа с людьми напрямую',
+      strengths: 'Умение слышать человека и говорить с ним так, чтобы он доверился — этого не заменит никакой инструмент. Такое доверие не даёт молодость или соцсети — оно нарабатывается годами, и это твоё преимущество, а не помеха.',
+      direction: 'Консультации и сопровождение — помощь людям в разговорах и ситуациях, которые им самим тяжело даются.',
+      altDirection: 'Второй вариант — сопровождение переписки и общения с клиентами для тех, кому это тяжело: составление ответов, подготовка к сложным разговорам.',
+      product: 'Консультации, сопровождение клиентов, помощь с перепиской и общением. Можно начать с одного конкретного запроса, например "разобрать сложную ситуацию" или "подготовить важный разговор". ИИ здесь — помощник для рутины (черновики ответов), а не замена тебе.',
+      clients: 'Люди, которым тяжело даётся сложное общение — переговоры, конфликтные ситуации, важные разговоры (личные или рабочие).',
+      price: 'Разовая консультация — ориентир 1500-3000 ₽. Первую можно провести бесплатно за отзыв, чтобы набрать первые случаи.',
+      plan: [
+        'День 1: вспомни знакомого, у которого сейчас непростой разговор или ситуация с общением.',
+        'День 2: предложи бесплатно помочь подготовиться — вместе продумать, что и как сказать.',
+        'День 3: после разговора попроси честную обратную связь — что реально помогло.'
+      ]
+    },
+    hands: {
+      icon: '🎨',
+      name: 'Мастер',
+      title: 'Твоё направление — продукт на основе того, что делаешь руками',
+      strengths: 'Готовый навык, который можно потрогать или увидеть — рукоделие, готовка, декор, дизайн. Ты уже умеешь то, чему другие только учатся — осталось не начать заново, а начать показывать.',
+      direction: 'Изделия или услуги на основе твоего хобби, с продвижением через тексты и фото, которые помогает собрать ИИ.',
+      altDirection: 'Второй вариант — небольшие заказы под конкретный повод (подарки, праздники), где ИИ помогает быстро оформить объявление или карточку товара.',
+      product: 'Изделия или услуги на основе рукоделия, готовки, декора — с описанием и продвижением, которые ИИ помогает собрать быстрее, чем вручную с нуля.',
+      clients: 'Знакомые и знакомые знакомых для начала, дальше — локальные сообщества и чаты по интересам, где твоя работа на виду.',
+      price: 'Сильно зависит от типа изделия — ориентир от 500 до нескольких тысяч рублей за штучную работу. Начинай по себестоимости плюс немного, поднимай цену по мере спроса.',
+      plan: [
+        'День 1: выбери одну готовую или пробную работу, которую можно показать.',
+        'День 2: попроси ИИ помочь написать короткое, живое описание или пост о ней.',
+        'День 3: покажи знакомым, спроси прямо — готовы ли заказать такое же и по какой цене.'
+      ]
+    },
+    teach: {
+      icon: '🎓',
+      name: 'Наставник',
+      title: 'Твоё направление — обучать тому, что уже знаешь сама',
+      strengths: 'Умение объяснять просто, терпение, к тебе уже идут с вопросами. Это накопленный годами опыт — именно он делает тебя тем человеком, которому доверяют, а не мешает начать что-то новое.',
+      direction: 'Мини-консультации или короткие занятия по теме, в которой ты уверена — без большого курса, можно начать с одной встречи.',
+      altDirection: 'Второй вариант — короткие разовые консультации по конкретному узкому вопросу, а не полноценное обучение — с этого проще начать.',
+      product: 'Мини-консультации или короткие занятия по теме, в которой ты уверена — то, что уже показывала знакомым бесплатно, просто оформленное как отдельное предложение.',
+      clients: 'Те, кто уже спрашивал у тебя совета в этой теме — начать логичнее всего с них, а не с незнакомых людей.',
+      price: 'Короткое занятие или консультация — ориентир 1000-2500 ₽. Первое имеет смысл провести бесплатно, чтобы собрать отзыв и увереннее назначить цену дальше.',
+      plan: [
+        'День 1: вспомни, о чём тебя чаще всего спрашивают знакомые.',
+        'День 2: предложи одному человеку короткое бесплатное занятие по этой теме.',
+        'День 3: попроси честный отзыв и спроси, порекомендует ли он тебя ещё кому-то.'
+      ]
+    }
+  };
+
+  const TIME_NOTE = {
+    t1: 'При 3-5 часах в неделю: этого хватит с запасом на весь план — не пытайся успеть больше, доведи его до конца.',
+    t2: 'При 5-10 часах в неделю: этого достаточно, чтобы пройти весь план и увидеть первую реакцию в течение недели.',
+    t3: 'При 10-15 часах в неделю: можно не только пройти план, но и сразу попробовать его на 2-3 знакомых, чтобы собрать больше обратной связи.',
+    t4: 'При 15+ часах в неделю: помимо плана, уже на этой неделе можно оформить простое предложение и показать его чуть шире круга знакомых.'
+  };
+
+  const SKILL_KEYWORDS = {
+    org: ['порядок', 'организ', 'план', 'отчёт', 'отчет', 'документ', 'расписан', 'систем', 'контрол', 'дисциплин'],
+    people: ['продаж', 'обще', 'консульт', 'поддержк', 'перегово', 'клиент', 'психол', 'коммуника', 'слуша'],
+    hands: ['шью', 'вяж', 'готовл', 'кулинар', 'рукодел', 'декор', 'дизайн', 'рисов', 'флорист', 'мастери', 'создава'],
+    teach: ['учи', 'обучен', 'объясн', 'преподава', 'наставник', 'тренер', 'менторств', 'лекци', 'натаскива']
+  };
+
+  function guessSkillFromText(text) {
+    const t = text.toLowerCase();
+    const scores = { org: 0, people: 0, hands: 0, teach: 0 };
+    Object.keys(SKILL_KEYWORDS).forEach(cat => {
+      SKILL_KEYWORDS[cat].forEach(word => {
+        if (t.includes(word)) scores[cat]++;
+      });
+    });
+    let top = null, topScore = 0;
+    Object.keys(scores).forEach(cat => {
+      if (scores[cat] > topScore) { top = cat; topScore = scores[cat]; }
+    });
+    return { top, topScore, scores };
+  }
+
+  function getModel(skill, interest) {
+    if (interest === 'tech') {
+      return 'Продавать отдельный AI-навык как услугу — тебе интересно разбираться в инструментах, это можно превратить в помощь другим с рутиной через ИИ.';
+    }
+    if (skill === 'hands' || interest === 'make') {
+      return 'Создать свой продукт с помощью ИИ — у тебя уже есть результат, ИИ ускоряет его упаковку и продвижение.';
+    }
+    if (skill === 'people' || interest === 'help1on1') {
+      return 'Продавать помощь и консультации напрямую людям — ИИ здесь только ускоряет рутину (черновики, подготовка), а ценность — в тебе самой.';
+    }
+    return 'Усилить то, что уже умеешь, и брать за это официально — то же дело, что и сейчас, но оформленное как отдельная услуга.';
+  }
+
+  function showResult() {
+    const aboutText = [
+      document.getElementById('f-skills').value,
+      document.getElementById('f-experience').value,
+      document.getElementById('f-useful').value,
+      document.getElementById('f-tasks').value
+    ].join(' ');
+
+    // Ответ-кнопка (answers.skill) — основной сигнал. Если свободный текст явно
+    // и с заметным отрывом указывает на другую категорию, слегка подстраиваем
+    // итоговый портрет под то, что человек реально написал о себе.
+    let finalSkill = answers.skill;
+    const guess = guessSkillFromText(aboutText);
+    if (guess.top && guess.top !== answers.skill && guess.topScore >= 2) {
+      finalSkill = guess.top;
+    }
+
+    const p = PORTRAITS[finalSkill];
+
+    const aboutParts = [
+      ['Получается лучше всего', document.getElementById('f-skills').value.trim()],
+      ['Опыт', document.getElementById('f-experience').value.trim()],
+      ['Кому полезно', document.getElementById('f-useful').value.trim()],
+      ['Задачи', document.getElementById('f-tasks').value.trim()]
+    ].filter(([label, val]) => val.length > 0);
+
+    if (aboutParts.length > 0) {
+      document.getElementById('result-about-block').style.display = 'block';
+      document.getElementById('result-about').innerHTML = aboutParts
+        .map(([label, val]) => `<div style="margin-bottom:4px;"><b style="display:inline;color:var(--text);">${label}:</b> ${val}</div>`)
+        .join('');
+    }
+
+    document.getElementById('result-name').textContent = p.icon + ' ' + p.name;
+    document.getElementById('result-title').textContent = p.title;
+    document.getElementById('result-strengths').textContent = p.strengths;
+    document.getElementById('result-direction').textContent = p.direction + ' ' + p.altDirection;
+    document.getElementById('result-model').textContent = getModel(finalSkill, answers.interest);
+    document.getElementById('result-product').textContent = p.product;
+    document.getElementById('result-price').textContent = p.price;
+    document.getElementById('result-clients').textContent = p.clients;
+    document.getElementById('result-plan').innerHTML = p.plan.map(step => `<div>${step}</div>`).join('');
+    document.getElementById('result-timenote').textContent = TIME_NOTE[answers.time];
+    goToStep(6);
+  }
+</script>
+
+</body>
+</html>
