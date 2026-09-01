@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)file:///C:/Users/tfeti/Downloads/Telegram%20Desktop/checklist.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Чек-лист вашего состояния</title>
+<style>
+  :root {
+    --bg: #ecdfcd;
+    --card: #fffbf4;
+    --accent: #a97558;
+    --accent2: #cc9a63;
+    --accent-dark: #7c5540;
+    --text: #3a2f26;
+    --muted: #7d6c5a;
+    --border: #e2d2b8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(204,154,99,0.28), transparent 40%),
+      radial-gradient(circle at 88% 12%, rgba(169,117,88,0.20), transparent 42%),
+      linear-gradient(160deg, #f2e6d3, #e4d2b6 55%, #d9c4a3);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    padding: 24px 12px;
+    min-height: 100vh;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: 0 10px 34px rgba(124,85,64,0.14);
+    max-width: 560px;
+    width: 100%;
+    padding: 28px 22px 24px;
+  }
+  h1 { font-size: 1.4rem; line-height: 1.3; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-size: 0.92rem; margin: 0 0 20px; }
+  label.name-label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.92rem; }
+  input[type="text"] {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 11px 13px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    margin-bottom: 20px;
+    background: #fffaf1;
+    color: var(--text);
+  }
+  .question { margin-bottom: 22px; }
+  .question-text { font-weight: 600; font-size: 0.97rem; margin-bottom: 10px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: border-color .15s, background .15s;
+  }
+  .option:active { background: #f3e6d0; }
+  .option.checked { border-color: var(--accent); background: #f3e6d0; }
+  .option input { margin: 0; accent-color: var(--accent); }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    box-shadow: 0 4px 14px rgba(169,117,88,0.30);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 6px;
+  }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+  .progress-note { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 10px; }
+  #result-screen { display: none; }
+  .result-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .result-score { font-size: 2.2rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 4px; }
+  .result-text { line-height: 1.6; font-size: 0.98rem; margin-top: 10px; }
+  .error-note { margin-top: 12px; font-size: 0.85rem; color: #a94442; text-align: center; display: none; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div id="form-screen">
+    <h1>Чек-лист вашего состояния</h1>
+    <p class="sub">Отметьте вариант, который ближе всего к тому, что вы чувствуете последнее время.</p>
+
+    <label class="name-label" for="f-name">Ваше имя</label>
+    <input type="text" id="f-name" placeholder="Как к вам обращаться">
+
+    <div id="questions"><div class="question"><div class="question-text">1. Чувствуете ли вы, что у вас не хватает энергии в течение дня?</div><div class="options">
+        <label class="option" data-q="0" data-v="0">
+          <input type="radio" name="q0" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="0" data-v="1">
+          <input type="radio" name="q0" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="0" data-v="2">
+          <input type="radio" name="q0" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="0" data-v="3">
+          <input type="radio" name="q0" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">2. Как часто вы сталкиваетесь с трудностями пробуждения утром?</div><div class="options">
+        <label class="option" data-q="1" data-v="0">
+          <input type="radio" name="q1" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="1" data-v="1">
+          <input type="radio" name="q1" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="1" data-v="2">
+          <input type="radio" name="q1" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="1" data-v="3">
+          <input type="radio" name="q1" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">3. Есть ли ощущение, что вы не полностью восстанавливаетесь даже после отдыха?</div><div class="options">
+        <label class="option" data-q="2" data-v="0">
+          <input type="radio" name="q2" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="2" data-v="1">
+          <input type="radio" name="q2" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="2" data-v="2">
+          <input type="radio" name="q2" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="2" data-v="3">
+          <input type="radio" name="q2" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">4. Как часто чувствуете «тяжесть» или снижение лёгкости в теле?</div><div class="options">
+        <label class="option" data-q="3" data-v="0">
+          <input type="radio" name="q3" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="3" data-v="1">
+          <input type="radio" name="q3" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="3" data-v="2">
+          <input type="radio" name="q3" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="3" data-v="3">
+          <input type="radio" name="q3" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">5. Как часто после приёма пищи вы чувствуете внутренний дискомфорт?</div><div class="options">
+        <label class="option" data-q="4" data-v="0">
+          <input type="radio" name="q4" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="4" data-v="1">
+          <input type="radio" name="q4" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="4" data-v="2">
+          <input type="radio" name="q4" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="4" data-v="3">
+          <input type="radio" name="q4" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">6. Бывает ли, что уровень вашей концентрации или ясности ума снижен?</div><div class="options">
+        <label class="option" data-q="5" data-v="0">
+          <input type="radio" name="q5" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="5" data-v="1">
+          <input type="radio" name="q5" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="5" data-v="2">
+          <input type="radio" name="q5" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="5" data-v="3">
+          <input type="radio" name="q5" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">7. Как часто в течение недели вы ощущаете неустойчивое эмоциональное состояние?</div><div class="options">
+        <label class="option" data-q="6" data-v="0">
+          <input type="radio" name="q6" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="6" data-v="1">
+          <input type="radio" name="q6" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="6" data-v="2">
+          <input type="radio" name="q6" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="6" data-v="3">
+          <input type="radio" name="q6" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">8. Как часто вы чувствуете напряжение в теле?</div><div class="options">
+        <label class="option" data-q="7" data-v="0">
+          <input type="radio" name="q7" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="7" data-v="1">
+          <input type="radio" name="q7" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="7" data-v="2">
+          <input type="radio" name="q7" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="7" data-v="3">
+          <input type="radio" name="q7" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">9. Насколько часто вы ощущаете себя дискомфортно в своём теле?</div><div class="options">
+        <label class="option" data-q="8" data-v="0">
+          <input type="radio" name="q8" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="8" data-v="1">
+          <input type="radio" name="q8" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="8" data-v="2">
+          <input type="radio" name="q8" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="8" data-v="3">
+          <input type="radio" name="q8" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">10. Бывает ли у вас ощущение, что организму нужна «перезагрузка» или обновление?</div><div class="options">
+        <label class="option" data-q="9" data-v="0">
+          <input type="radio" name="q9" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="9" data-v="1">
+          <input type="radio" name="q9" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="9" data-v="2">
+          <input type="radio" name="q9" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="9" data-v="3">
+          <input type="radio" name="q9" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">11. Как часто вы откладываете любые физические активности или движение?</div><div class="options">
+        <label class="option" data-q="10" data-v="0">
+          <input type="radio" name="q10" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="10" data-v="1">
+          <input type="radio" name="q10" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="10" data-v="2">
+          <input type="radio" name="q10" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="10" data-v="3">
+          <input type="radio" name="q10" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">12. Насколько регулярно забота о себе встроена в ваш повседневный ритм?</div><div class="options">
+        <label class="option" data-q="11" data-v="3">
+          <input type="radio" name="q11" value="3">
+          <span>Постоянно</span>
+        </label>
+      
+        <label class="option" data-q="11" data-v="2">
+          <input type="radio" name="q11" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="11" data-v="1">
+          <input type="radio" name="q11" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="11" data-v="0">
+          <input type="radio" name="q11" value="0">
+          <span>Никогда</span>
+        </label>
+      </div></div><div class="question"><div class="question-text">13. Как часто вопросы, связанные с вашим самочувствием, отходят на второй план?</div><div class="options">
+        <label class="option" data-q="12" data-v="0">
+          <input type="radio" name="q12" value="0">
+          <span>Никогда</span>
+        </label>
+      
+        <label class="option" data-q="12" data-v="1">
+          <input type="radio" name="q12" value="1">
+          <span>Редко</span>
+        </label>
+      
+        <label class="option" data-q="12" data-v="2">
+          <input type="radio" name="q12" value="2">
+          <span>Часто</span>
+        </label>
+      
+        <label class="option" data-q="12" data-v="3">
+          <input type="radio" name="q12" value="3">
+          <span>Постоянно</span>
+        </label>
+      </div></div></div>
+
+    <button class="btn" id="submit-btn" disabled="" onclick="submitQuiz()">Показать результат</button>
+    <div class="progress-note" id="progress-note">Отвечено 0 из 13</div>
+  </div>
+
+  <div id="result-screen">
+    <span class="result-badge" id="result-badge"></span>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-text" id="result-text"></div>
+    <div class="error-note" id="error-note">Не получилось отправить результат вам на почту — проверьте интернет и попробуйте ещё раз, либо перешлите этот балл вручную.</div>
+  </div>
+
+</div>
+
+<script>
+  // Каждый вопрос: 4 варианта (Никогда=0, Редко=1, Часто=2, Постоянно=3).
+  // reverse=true — шкала перевёрнута (для вопроса про регулярность заботы о себе).
+  const QUESTIONS = [
+    { text: 'Чувствуете ли вы, что у вас не хватает энергии в течение дня?' },
+    { text: 'Как часто вы сталкиваетесь с трудностями пробуждения утром?' },
+    { text: 'Есть ли ощущение, что вы не полностью восстанавливаетесь даже после отдыха?' },
+    { text: 'Как часто чувствуете «тяжесть» или снижение лёгкости в теле?' },
+    { text: 'Как часто после приёма пищи вы чувствуете внутренний дискомфорт?' },
+    { text: 'Бывает ли, что уровень вашей концентрации или ясности ума снижен?' },
+    { text: 'Как часто в течение недели вы ощущаете неустойчивое эмоциональное состояние?' },
+    { text: 'Как часто вы чувствуете напряжение в теле?' },
+    { text: 'Насколько часто вы ощущаете себя дискомфортно в своём теле?' },
+    { text: 'Бывает ли у вас ощущение, что организму нужна «перезагрузка» или обновление?' },
+    { text: 'Как часто вы откладываете любые физические активности или движение?' },
+    { text: 'Насколько регулярно забота о себе встроена в ваш повседневный ритм?', reverse: true },
+    { text: 'Как часто вопросы, связанные с вашим самочувствием, отходят на второй план?' }
+  ];
+
+  const OPTIONS = [
+    { label: 'Никогда', v: 0 },
+    { label: 'Редко', v: 1 },
+    { label: 'Часто', v: 2 },
+    { label: 'Постоянно', v: 3 }
+  ];
+
+  const answers = {};
+
+  function renderQuestions() {
+    const container = document.getElementById('questions');
+    container.innerHTML = QUESTIONS.map((q, qi) => {
+      const opts = q.reverse ? [...OPTIONS].reverse() : OPTIONS;
+      const optsHtml = opts.map(o => `
+        <label class="option" data-q="${qi}" data-v="${o.v}">
+          <input type="radio" name="q${qi}" value="${o.v}">
+          <span>${o.label}</span>
+        </label>
+      `).join('');
+      return `<div class="question"><div class="question-text">${qi + 1}. ${q.text}</div><div class="options">${optsHtml}</div></div>`;
+    }).join('');
+
+    container.querySelectorAll('.option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const qi = opt.dataset.q;
+        container.querySelectorAll(`.option[data-q="${qi}"]`).forEach(o => o.classList.remove('checked'));
+        opt.classList.add('checked');
+        opt.querySelector('input').checked = true;
+        answers[qi] = parseInt(opt.dataset.v, 10);
+        updateProgress();
+      });
+    });
+  }
+
+  function updateProgress() {
+    const count = Object.keys(answers).length;
+    document.getElementById('progress-note').textContent = `Отвечено ${count} из ${QUESTIONS.length}`;
+    document.getElementById('submit-btn').disabled = count < QUESTIONS.length;
+  }
+
+  function getBand(score) {
+    if (score <= 9) {
+      return {
+        badge: 'Базовый уровень гармонии',
+        text: 'Организм в целом справляется, достаточно профилактических шагов и лёгкой поддержки.'
+      };
+    }
+    if (score <= 20) {
+      return {
+        badge: 'Необходим первый шаг',
+        text: 'Организм сигналит о перегрузке. Рекомендуется пройти Coral detox-plus.'
+      };
+    }
+    return {
+      badge: 'Необходима полная программа',
+      text: 'Организм прямо просит о комплексной заботе. Лучший вариант — пройти всю Концепцию здоровья 2.0 последовательно для восстановления баланса и энергии.'
+    };
+  }
+
+  // Вставьте сюда свой access key с web3forms.com (бесплатно, без пароля - только email).
+  const WEB3FORMS_ACCESS_KEY = '8a77e7a9-34a7-4dcf-b27f-49bee592f26d';
+
+  function submitQuiz() {
+    const name = document.getElementById('f-name').value.trim() || 'Без имени';
+    const score = QUESTIONS.reduce((sum, q, qi) => sum + (answers[qi] || 0), 0);
+    const band = getBand(score);
+
+    document.getElementById('result-badge').textContent = band.badge;
+    document.getElementById('result-score').textContent = score + ' баллов';
+    document.getElementById('result-text').textContent = band.text;
+    document.getElementById('form-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+
+    const answersText = QUESTIONS.map((q, qi) => `${qi + 1}. ${q.text} — ${answers[qi]}`).join('\n');
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: `Чек-лист состояния: ${name} — ${score} баллов (${band.badge})`,
+        name: name,
+        Итоговый_балл: score,
+        Диапазон: band.badge,
+        Ответы: answersText
+      })
+    }).then(r => r.json()).then(data => {
+      if (!data.success) {
+        document.getElementById('error-note').style.display = 'block';
+      }
+    }).catch(() => {
+      document.getElementById('error-note').style.display = 'block';
+    });
+  }
+
+  renderQuestions();
+</script>
+
+
+
+</body></html>
