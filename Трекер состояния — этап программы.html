@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///C:/Users/tfeti/Downloads/Telegram%20Desktop/tracker.html -->
+<!-- saved from url=(0228)file:///C:/Users/tfeti/Downloads/Telegram%20Desktop/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80_%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F_%D1%8D%D1%82%D0%B0%D0%BF_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D1%8B.html -->
 <html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,21 +51,19 @@
     background: #fffaf1;
     color: var(--text);
   }
-  .question { margin-bottom: 20px; }
-  .question-text { font-weight: 600; font-size: 0.95rem; margin-bottom: 10px; }
-  .options { display: flex; flex-direction: column; gap: 8px; }
-  .option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .question { margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .question-text { font-weight: 600; font-size: 0.93rem; flex: 1; }
+  .yn-toggle { display: flex; gap: 6px; flex-shrink: 0; }
+  .yn-btn {
+    min-width: 52px;
+    text-align: center;
     border: 1.5px solid var(--border);
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 8px 10px;
     cursor: pointer;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
   }
-  .option.checked { border-color: var(--accent); background: #f3e6d0; }
-  .option input { margin: 0; accent-color: var(--accent); }
+  .yn-btn.checked { border-color: var(--accent); background: #f3e6d0; font-weight: 700; color: var(--accent-dark); }
   .scale-row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
   .scale-btn {
     flex: 1;
@@ -97,19 +95,20 @@
   .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
   .progress-note { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 10px; }
   #result-screen { display: none; }
-  .result-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--accent2), var(--accent));
-    color: #fff;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 5px 14px;
-    border-radius: 999px;
-    margin-bottom: 14px;
+  .result-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+  .result-meta { color: var(--muted); font-size: 0.88rem; margin-bottom: 16px; }
+  .result-list { border-top: 1.5px solid var(--border); }
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1.5px solid var(--border);
+    font-size: 0.9rem;
   }
-  .result-score { font-size: 2.2rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 4px; }
-  .result-text { line-height: 1.6; font-size: 0.98rem; margin-top: 10px; }
-  .result-extra { margin-top: 14px; font-size: 0.9rem; color: var(--muted); }
+  .result-row .rv { flex-shrink: 0; font-weight: 700; }
+  .result-row .rv.yes { color: var(--accent-dark); }
+  .result-row .rv.no { color: var(--muted); font-weight: 400; }
   .error-note { margin-top: 12px; font-size: 0.85rem; color: #a94442; text-align: center; display: none; }
 </style>
 </head>
@@ -119,7 +118,7 @@
 
   <div id="form-screen">
     <h1>Трекер состояния</h1>
-    <p class="sub">Заполняется на каждом этапе программы — это позволяет видеть прогресс.</p>
+    <p class="sub">Заполняется на каждом этапе программы — фиксируем, что есть сейчас.</p>
 
     <label class="f-label" for="f-name">Ваше имя</label>
     <input type="text" id="f-name" placeholder="Как к вам обращаться">
@@ -142,395 +141,167 @@
     <input type="number" id="f-weight" placeholder="Например: 68">
 
     <div class="section-title">Симптомы</div>
-    <div id="questions"><div class="question"><div class="question-text">1. Чувство слабости или пониженной энергии</div><div class="options">
-        <label class="option" data-q="0" data-v="0">
-          <input type="radio" name="q0" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="0" data-v="1">
-          <input type="radio" name="q0" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="0" data-v="2">
-          <input type="radio" name="q0" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="0" data-v="3">
-          <input type="radio" name="q0" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">2. Головные боли, ухудшение самочувствия при изменении погоды</div><div class="options">
-        <label class="option" data-q="1" data-v="0">
-          <input type="radio" name="q1" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="1" data-v="1">
-          <input type="radio" name="q1" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="1" data-v="2">
-          <input type="radio" name="q1" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="1" data-v="3">
-          <input type="radio" name="q1" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">3. Скованность или дискомфорт в суставах</div><div class="options">
-        <label class="option" data-q="2" data-v="0">
-          <input type="radio" name="q2" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="2" data-v="1">
-          <input type="radio" name="q2" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="2" data-v="2">
-          <input type="radio" name="q2" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="2" data-v="3">
-          <input type="radio" name="q2" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">4. Отёчность</div><div class="options">
-        <label class="option" data-q="3" data-v="0">
-          <input type="radio" name="q3" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="3" data-v="1">
-          <input type="radio" name="q3" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="3" data-v="2">
-          <input type="radio" name="q3" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="3" data-v="3">
-          <input type="radio" name="q3" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">5. Напряжённость в теле, особенно под вечер</div><div class="options">
-        <label class="option" data-q="4" data-v="0">
-          <input type="radio" name="q4" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="4" data-v="1">
-          <input type="radio" name="q4" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="4" data-v="2">
-          <input type="radio" name="q4" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="4" data-v="3">
-          <input type="radio" name="q4" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">6. Сухость кожи</div><div class="options">
-        <label class="option" data-q="5" data-v="0">
-          <input type="radio" name="q5" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="5" data-v="1">
-          <input type="radio" name="q5" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="5" data-v="2">
-          <input type="radio" name="q5" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="5" data-v="3">
-          <input type="radio" name="q5" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">7. «Гусиная кожа» (шероховатость кожи), красные точки на коже</div><div class="options">
-        <label class="option" data-q="6" data-v="0">
-          <input type="radio" name="q6" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="6" data-v="1">
-          <input type="radio" name="q6" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="6" data-v="2">
-          <input type="radio" name="q6" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="6" data-v="3">
-          <input type="radio" name="q6" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">8. Высыпания на лице и теле</div><div class="options">
-        <label class="option" data-q="7" data-v="0">
-          <input type="radio" name="q7" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="7" data-v="1">
-          <input type="radio" name="q7" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="7" data-v="2">
-          <input type="radio" name="q7" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="7" data-v="3">
-          <input type="radio" name="q7" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">9. Дискомфорт внизу живота во время менструации, эмоциональные перепады перед менструацией, набухание и болезненность груди перед менструацией</div><div class="options">
-        <label class="option" data-q="8" data-v="0">
-          <input type="radio" name="q8" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="8" data-v="1">
-          <input type="radio" name="q8" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="8" data-v="2">
-          <input type="radio" name="q8" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="8" data-v="3">
-          <input type="radio" name="q8" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">10. Зябкость рук и ног</div><div class="options">
-        <label class="option" data-q="9" data-v="0">
-          <input type="radio" name="q9" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="9" data-v="1">
-          <input type="radio" name="q9" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="9" data-v="2">
-          <input type="radio" name="q9" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="9" data-v="3">
-          <input type="radio" name="q9" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">11. Неприятные ощущения после еды или на пустой желудок</div><div class="options">
-        <label class="option" data-q="10" data-v="0">
-          <input type="radio" name="q10" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="10" data-v="1">
-          <input type="radio" name="q10" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="10" data-v="2">
-          <input type="radio" name="q10" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="10" data-v="3">
-          <input type="radio" name="q10" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">12. Тяжесть в правом подреберье</div><div class="options">
-        <label class="option" data-q="11" data-v="0">
-          <input type="radio" name="q11" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="11" data-v="1">
-          <input type="radio" name="q11" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="11" data-v="2">
-          <input type="radio" name="q11" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="11" data-v="3">
-          <input type="radio" name="q11" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">13. Нарушение регулярности и лёгкости пищеварения: вздутие</div><div class="options">
-        <label class="option" data-q="12" data-v="0">
-          <input type="radio" name="q12" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="12" data-v="1">
-          <input type="radio" name="q12" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="12" data-v="2">
-          <input type="radio" name="q12" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="12" data-v="3">
-          <input type="radio" name="q12" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">14. Нестабильная работа кишечника</div><div class="options">
-        <label class="option" data-q="13" data-v="0">
-          <input type="radio" name="q13" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="13" data-v="1">
-          <input type="radio" name="q13" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="13" data-v="2">
-          <input type="radio" name="q13" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="13" data-v="3">
-          <input type="radio" name="q13" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">15. Нестабильность со стороны иммунной системы</div><div class="options">
-        <label class="option" data-q="14" data-v="0">
-          <input type="radio" name="q14" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="14" data-v="1">
-          <input type="radio" name="q14" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="14" data-v="2">
-          <input type="radio" name="q14" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="14" data-v="3">
-          <input type="radio" name="q14" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">16. Сезонный дискомфорт: насморк, чихание, слезящиеся глаза</div><div class="options">
-        <label class="option" data-q="15" data-v="0">
-          <input type="radio" name="q15" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="15" data-v="1">
-          <input type="radio" name="q15" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="15" data-v="2">
-          <input type="radio" name="q15" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="15" data-v="3">
-          <input type="radio" name="q15" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">17. Тянущие ощущения при длительном стоянии</div><div class="options">
-        <label class="option" data-q="16" data-v="0">
-          <input type="radio" name="q16" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="16" data-v="1">
-          <input type="radio" name="q16" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="16" data-v="2">
-          <input type="radio" name="q16" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="16" data-v="3">
-          <input type="radio" name="q16" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">18. Снижение внимания и концентрации</div><div class="options">
-        <label class="option" data-q="17" data-v="0">
-          <input type="radio" name="q17" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="17" data-v="1">
-          <input type="radio" name="q17" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="17" data-v="2">
-          <input type="radio" name="q17" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="17" data-v="3">
-          <input type="radio" name="q17" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div><div class="question"><div class="question-text">19. Изменение веса без явных причин</div><div class="options">
-        <label class="option" data-q="18" data-v="0">
-          <input type="radio" name="q18" value="0">
-          <span>Никогда</span>
-        </label>
-      
-        <label class="option" data-q="18" data-v="1">
-          <input type="radio" name="q18" value="1">
-          <span>Редко</span>
-        </label>
-      
-        <label class="option" data-q="18" data-v="2">
-          <input type="radio" name="q18" value="2">
-          <span>Часто</span>
-        </label>
-      
-        <label class="option" data-q="18" data-v="3">
-          <input type="radio" name="q18" value="3">
-          <span>Постоянно</span>
-        </label>
-      </div></div></div>
+    <div id="questions">
+      <div class="question">
+        <div class="question-text">1. Чувство слабости или пониженной энергии</div>
+        <div class="yn-toggle" data-q="0">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">2. Головные боли, ухудшение самочувствия при изменении погоды</div>
+        <div class="yn-toggle" data-q="1">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">3. Скованность или дискомфорт в суставах</div>
+        <div class="yn-toggle" data-q="2">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">4. Отёчность</div>
+        <div class="yn-toggle" data-q="3">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">5. Напряжённость в теле, особенно под вечер</div>
+        <div class="yn-toggle" data-q="4">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">6. Сухость кожи</div>
+        <div class="yn-toggle" data-q="5">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">7. «Гусиная кожа» (шероховатость кожи), красные точки на коже</div>
+        <div class="yn-toggle" data-q="6">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">8. Высыпания на лице и теле</div>
+        <div class="yn-toggle" data-q="7">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">9. Дискомфорт внизу живота во время менструации, эмоциональные перепады перед менструацией, набухание и болезненность груди перед менструацией</div>
+        <div class="yn-toggle" data-q="8">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">10. Зябкость рук и ног</div>
+        <div class="yn-toggle" data-q="9">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">11. Неприятные ощущения после еды или на пустой желудок</div>
+        <div class="yn-toggle" data-q="10">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">12. Тяжесть в правом подреберье</div>
+        <div class="yn-toggle" data-q="11">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">13. Нарушение регулярности и лёгкости пищеварения: вздутие</div>
+        <div class="yn-toggle" data-q="12">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">14. Нестабильная работа кишечника</div>
+        <div class="yn-toggle" data-q="13">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">15. Нестабильность со стороны иммунной системы</div>
+        <div class="yn-toggle" data-q="14">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">16. Сезонный дискомфорт: насморк, чихание, слезящиеся глаза</div>
+        <div class="yn-toggle" data-q="15">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">17. Тянущие ощущения при длительном стоянии</div>
+        <div class="yn-toggle" data-q="16">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">18. Снижение внимания и концентрации</div>
+        <div class="yn-toggle" data-q="17">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    
+      <div class="question">
+        <div class="question-text">19. Изменение веса без явных причин</div>
+        <div class="yn-toggle" data-q="18">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    </div>
 
     <div class="section-title">Общее самочувствие</div>
-    <div class="question">
-      <div class="question-text">Эмоциональное состояние (1 - плохо, 10 - отлично)</div>
+    <div class="question" style="display:block;">
+      <div class="question-text" style="margin-bottom:10px;">Эмоциональное состояние (1 - плохо, 10 - отлично)</div>
       <div class="scale-row" id="emo-scale"><div class="scale-btn" data-v="1">1</div><div class="scale-btn" data-v="2">2</div><div class="scale-btn" data-v="3">3</div><div class="scale-btn" data-v="4">4</div><div class="scale-btn" data-v="5">5</div><div class="scale-btn" data-v="6">6</div><div class="scale-btn" data-v="7">7</div><div class="scale-btn" data-v="8">8</div><div class="scale-btn" data-v="9">9</div><div class="scale-btn" data-v="10">10</div></div>
     </div>
-    <div class="question">
-      <div class="question-text">Физическое состояние (1 - плохо, 10 - отлично)</div>
+    <div class="question" style="display:block;">
+      <div class="question-text" style="margin-bottom:10px;">Физическое состояние (1 - плохо, 10 - отлично)</div>
       <div class="scale-row" id="phys-scale"><div class="scale-btn" data-v="1">1</div><div class="scale-btn" data-v="2">2</div><div class="scale-btn" data-v="3">3</div><div class="scale-btn" data-v="4">4</div><div class="scale-btn" data-v="5">5</div><div class="scale-btn" data-v="6">6</div><div class="scale-btn" data-v="7">7</div><div class="scale-btn" data-v="8">8</div><div class="scale-btn" data-v="9">9</div><div class="scale-btn" data-v="10">10</div></div>
     </div>
 
@@ -539,10 +310,9 @@
   </div>
 
   <div id="result-screen">
-    <span class="result-badge" id="result-badge"></span>
-    <div class="result-score" id="result-score"></div>
-    <div class="result-text" id="result-text"></div>
-    <div class="result-extra" id="result-extra"></div>
+    <div class="result-title">Ваше состояние зафиксировано</div>
+    <div class="result-meta" id="result-meta"></div>
+    <div class="result-list" id="result-list"></div>
     <div class="error-note" id="error-note">Не получилось отправить результат — проверьте интернет и попробуйте ещё раз.</div>
   </div>
 
@@ -571,37 +341,31 @@
     'Изменение веса без явных причин'
   ];
 
-  const OPTIONS = [
-    { label: 'Никогда', v: 0 },
-    { label: 'Редко', v: 1 },
-    { label: 'Часто', v: 2 },
-    { label: 'Постоянно', v: 3 }
-  ];
-
   const answers = {};
   let emoValue = null;
   let physValue = null;
 
   function renderQuestions() {
     const container = document.getElementById('questions');
-    container.innerHTML = QUESTIONS.map((q, qi) => {
-      const optsHtml = OPTIONS.map(o => `
-        <label class="option" data-q="${qi}" data-v="${o.v}">
-          <input type="radio" name="q${qi}" value="${o.v}">
-          <span>${o.label}</span>
-        </label>
-      `).join('');
-      return `<div class="question"><div class="question-text">${qi + 1}. ${q}</div><div class="options">${optsHtml}</div></div>`;
-    }).join('');
+    container.innerHTML = QUESTIONS.map((q, qi) => `
+      <div class="question">
+        <div class="question-text">${qi + 1}. ${q}</div>
+        <div class="yn-toggle" data-q="${qi}">
+          <div class="yn-btn" data-v="Да">Да</div>
+          <div class="yn-btn" data-v="Нет">Нет</div>
+        </div>
+      </div>
+    `).join('');
 
-    container.querySelectorAll('.option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        const qi = opt.dataset.q;
-        container.querySelectorAll(`.option[data-q="${qi}"]`).forEach(o => o.classList.remove('checked'));
-        opt.classList.add('checked');
-        opt.querySelector('input').checked = true;
-        answers[qi] = parseInt(opt.dataset.v, 10);
-        updateProgress();
+    container.querySelectorAll('.yn-toggle').forEach(toggle => {
+      const qi = toggle.dataset.q;
+      toggle.querySelectorAll('.yn-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          toggle.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('checked'));
+          btn.classList.add('checked');
+          answers[qi] = btn.dataset.v;
+          updateProgress();
+        });
       });
     });
   }
@@ -629,25 +393,6 @@
     document.getElementById('submit-btn').disabled = count < QUESTIONS.length || emoValue === null || physValue === null;
   }
 
-  function getBand(score) {
-    if (score <= 14) {
-      return {
-        badge: 'Базовый уровень гармонии',
-        text: 'Организм в целом справляется, достаточно профилактических шагов и лёгкой поддержки.'
-      };
-    }
-    if (score <= 30) {
-      return {
-        badge: 'Необходим первый шаг',
-        text: 'Организм сигналит о перегрузке. Рекомендуется пройти Coral detox-plus.'
-      };
-    }
-    return {
-      badge: 'Необходима полная программа',
-      text: 'Организм прямо просит о комплексной заботе. Лучший вариант — пройти всю Концепцию здоровья 2.0 последовательно для восстановления баланса и энергии.'
-    };
-  }
-
   // Вставьте сюда URL вашего Apps Script Web App (после деплоя - см. инструкцию).
   const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwjoXjaKaCWD28rO3DtcGYmg_siSXN7TeRMJgU8NmMlkiF0-UITYB08Y_VRJN0mo0VZ9g/exec';
 
@@ -657,28 +402,31 @@
     const stage = document.getElementById('f-stage').value;
     const weight = document.getElementById('f-weight').value.trim();
 
-    const score = QUESTIONS.reduce((sum, q, qi) => sum + (answers[qi] || 0), 0);
-    const band = getBand(score);
+    document.getElementById('result-meta').textContent =
+      `Имя: ${name} · Этап: ${stage} · Вес: ${weight || '—'} кг · Эмоциональное: ${emoValue}/10 · Физическое: ${physValue}/10`;
 
-    document.getElementById('result-badge').textContent = band.badge;
-    document.getElementById('result-score').textContent = score + ' баллов';
-    document.getElementById('result-text').textContent = band.text;
-    document.getElementById('result-extra').textContent =
-      `Этап: ${stage} · Эмоциональное состояние: ${emoValue}/10 · Физическое состояние: ${physValue}/10`;
+    document.getElementById('result-list').innerHTML = QUESTIONS.map((q, qi) => {
+      const v = answers[qi];
+      const cls = v === 'Да' ? 'yes' : 'no';
+      return `<div class="result-row"><span>${q}</span><span class="rv ${cls}">${v}</span></div>`;
+    }).join('');
+
     document.getElementById('form-screen').style.display = 'none';
     document.getElementById('result-screen').style.display = 'block';
 
-    const answersText = QUESTIONS.map((q, qi) => `${qi + 1}. ${q} — ${answers[qi]}`).join('\n');
+    const payload = {
+      name, email, stage, weight,
+      emotional: emoValue, physical: physValue
+    };
+    QUESTIONS.forEach((q, qi) => {
+      payload['s' + (qi + 1)] = answers[qi];
+    });
+    payload.symptomLabels = QUESTIONS;
 
     fetch(WEBAPP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        name, email, stage, weight,
-        score, band: band.badge,
-        emotional: emoValue, physical: physValue,
-        answersText
-      })
+      body: JSON.stringify(payload)
     }).catch(() => {
       document.getElementById('error-note').style.display = 'block';
     });
