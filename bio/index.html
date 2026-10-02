@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Татьяна Фетисова</title>
+<style>
+  :root{
+    --bg:#f6efe6;
+    --card:#fffaf3;
+    --brown-dark:#4a3a2f;
+    --brown:#8a6f5c;
+    --brown-soft:#b89a81;
+    --accent:#c98a5e;
+    --line:#e3d4c2;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--brown-dark);
+    font-family:'Georgia','Times New Roman',serif;
+    line-height:1.6;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+  .avatar{
+    width:112px;height:112px;
+    border-radius:50%;
+    margin:0 auto 24px;
+    background:linear-gradient(135deg,var(--accent),var(--brown-soft));
+    display:flex;align-items:center;justify-content:center;
+    color:#fffaf3;
+    font-size:40px;
+    letter-spacing:2px;
+    box-shadow:0 8px 24px rgba(138,111,92,0.25);
+  }
+  h1{
+    text-align:center;
+    font-size:30px;
+    margin:0 0 6px;
+    color:var(--brown-dark);
+    font-weight:600;
+  }
+  .subtitle{
+    text-align:center;
+    color:var(--brown);
+    font-size:16px;
+    margin:0 0 40px;
+    font-style:italic;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:28px 26px;
+    margin-bottom:22px;
+  }
+  .card h2{
+    font-size:18px;
+    margin:0 0 12px;
+    color:var(--accent);
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    font-size:14px;
+    font-weight:700;
+  }
+  .card p{
+    margin:0 0 10px;
+    font-size:16px;
+    color:var(--brown-dark);
+  }
+  .card p:last-child{margin-bottom:0;}
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:14px;
+  }
+  .tag{
+    background:#f1e4d5;
+    color:var(--brown);
+    border-radius:20px;
+    padding:6px 14px;
+    font-size:13px;
+    border:1px solid var(--line);
+  }
+  .quotes{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .quote{
+    position:relative;
+    padding-left:18px;
+    border-left:3px solid var(--accent);
+    font-style:italic;
+    color:var(--brown);
+    font-size:15px;
+  }
+  .cta{
+    text-align:center;
+    margin-top:36px;
+  }
+  .cta a{
+    display:inline-block;
+    background:var(--accent);
+    color:#fffaf3;
+    text-decoration:none;
+    padding:16px 36px;
+    border-radius:30px;
+    font-size:17px;
+    font-weight:600;
+    box-shadow:0 10px 24px rgba(201,138,94,0.35);
+    transition:transform 0.15s ease;
+  }
+  .cta a:hover{transform:translateY(-2px);}
+  .cta p{
+    color:var(--brown);
+    font-size:14px;
+    margin-top:14px;
+  }
+  footer{
+    text-align:center;
+    color:var(--brown-soft);
+    font-size:13px;
+    margin-top:40px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="avatar">ТФ</div>
+  <h1>Татьяна Фетисова</h1>
+  <p class="subtitle">28 лет в продажах и общении с людьми — сейчас строю своё дело и доход в онлайне, с нуля, после 40</p>
+
+  <div class="card">
+    <h2>О себе</h2>
+    <p>Больше 25 лет проработала в продажах — от оптового склада до медицинского представителя в крупной международной компании. Знаю, что такое «день сурка»: ранний подъём, дорога, отчёты до ночи — и как не хватает времени на себя и семью.</p>
+    <p>После декрета пандемии жизнь сама подсказала новое направление. Я с нуля разобралась в рекламе, сайтах, соцсетях, ботах в Telegram — а сейчас осваиваю нейросети и автоворонки, чтобы строить своё дело без привязки к офису и графику.</p>
+  </div>
+
+  <div class="card">
+    <h2>Чем занимаюсь сейчас</h2>
+    <p>Делюсь своим путём «начать заново после 40–50» и помогаю другим женщинам найти своё дело, доход и время на себя — без резких перемен и без иллюзий о лёгких деньгах.</p>
+    <div class="tags">
+      <span class="tag">продажи и общение</span>
+      <span class="tag">здоровье и уход за собой</span>
+      <span class="tag">своё дело онлайн</span>
+      <span class="tag">ИИ и автоворонки</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Обо мне говорят</h2>
+    <div class="quotes">
+      <div class="quote">«Ты — человек, с которым спокойно»</div>
+      <div class="quote">«Ты объясняешь так, что наконец понимаешь»</div>
+      <div class="quote">«Ты не судишь и не давишь — ты поддерживаешь»</div>
+      <div class="quote">«С тобой по полочкам и по-настоящему»</div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <a href="https://t.me/fetisovatatiana" target="_blank" rel="noopener">Написать мне в Telegram</a>
+    <p>Расскажу о своём пути и о том, как может быть у вас</p>
+  </div>
+
+  <footer>Татьяна Фетисова · 2026</footer>
+</div>
+</body>
+</html>
