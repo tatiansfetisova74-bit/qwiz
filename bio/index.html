@@ -59,6 +59,32 @@
     padding:28px 26px;
     margin-bottom:22px;
   }
+  .card.highlight{
+    background:#fbf1e1;
+    border:1px solid var(--accent);
+  }
+  .benefits{
+    margin:0;
+    padding:0 0 0 4px;
+    list-style:none;
+  }
+  .benefits li{
+    position:relative;
+    padding-left:28px;
+    margin-bottom:14px;
+    font-size:16px;
+    color:var(--brown-dark);
+  }
+  .benefits li:last-child{margin-bottom:0;}
+  .benefits li::before{
+    content:"✓";
+    position:absolute;
+    left:0;
+    top:1px;
+    color:var(--accent);
+    font-weight:700;
+    font-size:17px;
+  }
   .card h2{
     font-size:18px;
     margin:0 0 12px;
@@ -162,6 +188,15 @@
       <span class="tag">своё дело онлайн</span>
       <span class="tag">ИИ и автоворонки</span>
     </div>
+  </div>
+
+  <div class="card highlight">
+    <h2>Что ты получишь, если напишешь мне</h2>
+    <ul class="benefits">
+      <li>Разберём твою конкретную ситуацию — опыт, время, деньги, страхи</li>
+      <li>Найдём реалистичный первый шаг именно под тебя — без шаблонных советов «просто начни»</li>
+      <li>Бесплатно и без давления: 30 минут честного разговора с человеком, который сам прошёл этот путь после 40</li>
+    </ul>
   </div>
 
   <div class="card">
