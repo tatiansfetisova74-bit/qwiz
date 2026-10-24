@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Как получить 10 идей для блога с помощью нейросети</title>
+<style>
+  :root{
+    --accent:#6C5CE7;
+    --accent-dark:#4E3FC4;
+    --yellow:#F4B740;
+    --bg:#FAF9FC;
+    --card-blue:#EEF1FC;
+    --card-green:#E8F6F0;
+    --card-pink:#FBEAF1;
+    --text:#2A2740;
+    --text-soft:#5B5775;
+    --border:#E4E1F0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--text);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:600px;
+    margin:0 auto;
+    padding:0 0 60px;
+  }
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(160deg,var(--accent) 0%,var(--accent-dark) 100%);
+    color:#fff;
+    padding:36px 24px 32px;
+    border-radius:0 0 28px 28px;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    background:rgba(255,255,255,.18);
+    padding:6px 12px;
+    border-radius:999px;
+    margin-bottom:16px;
+  }
+  .hero h1{
+    font-size:28px;
+    line-height:1.25;
+    margin:0 0 10px;
+    font-weight:800;
+  }
+  .hero h1 .hl{
+    color:var(--yellow);
+  }
+  .hero p{
+    font-size:15px;
+    opacity:.92;
+    margin:0;
+  }
+
+  /* FLOW */
+  .flow{
+    display:flex;
+    gap:8px;
+    margin:22px 24px 0;
+    background:#fff;
+    border-radius:16px;
+    padding:14px;
+    box-shadow:0 6px 20px rgba(76,63,196,.08);
+  }
+  .flow-step{
+    flex:1;
+    text-align:center;
+    padding:6px 2px;
+  }
+  .flow-step b{
+    display:block;
+    font-size:12.5px;
+    color:var(--accent-dark);
+    font-weight:700;
+    margin-bottom:2px;
+  }
+  .flow-step span{
+    font-size:11px;
+    color:var(--text-soft);
+  }
+  .flow-arrow{
+    align-self:center;
+    color:var(--accent);
+    font-size:16px;
+    opacity:.6;
+  }
+
+  .need-box{
+    margin:18px 24px 0;
+    background:var(--card-pink);
+    border-radius:14px;
+    padding:14px 16px;
+    font-size:13.5px;
+    color:var(--text);
+  }
+  .need-box b{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:#B23E72;
+    margin-bottom:4px;
+  }
+
+  .intro-text{
+    margin:18px 24px 0;
+    font-size:14.5px;
+    color:var(--text-soft);
+    padding-bottom: 4px;
+  }
+
+  /* STEP CARD */
+  .step{
+    margin:28px 20px 0;
+    background:#fff;
+    border-radius:20px;
+    padding:22px 20px 24px;
+    box-shadow:0 8px 24px rgba(42,39,64,.06);
+    border:1px solid var(--border);
+  }
+  .step-head{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  .step-num{
+    flex:none;
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:var(--yellow);
+    color:#3A2A00;
+    font-weight:800;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .step-title h2{
+    margin:0 0 3px;
+    font-size:19px;
+    font-weight:800;
+    color:var(--text);
+  }
+  .step-title p{
+    margin:0;
+    font-size:13px;
+    color:var(--text-soft);
+  }
+  .step p.body{
+    font-size:14.5px;
+    color:var(--text);
+    margin:0 0 14px;
+  }
+
+  h3.sub{
+    font-size:14px;
+    font-weight:700;
+    color:var(--accent-dark);
+    margin:16px 0 10px;
+  }
+
+  .field{
+    background:var(--card-blue);
+    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:8px;
+  }
+  .field b{
+    display:block;
+    font-size:13.5px;
+    color:var(--text);
+    margin-bottom:2px;
+  }
+  .field span{
+    font-size:12.5px;
+    color:var(--text-soft);
+  }
+
+  .example{
+    background:var(--card-green);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-top:14px;
+    font-size:13.5px;
+  }
+  .example b.label{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:#1F8E63;
+    margin-bottom:6px;
+  }
+  .example div.line{margin-bottom:3px;}
+  .example div.line:last-child{margin-bottom:0;}
+
+  .tip{
+    margin-top:12px;
+    font-size:13px;
+    color:var(--text-soft);
+    background:#FFF7E8;
+    border-radius:12px;
+    padding:12px 14px;
+  }
+  .tip b{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:#B07A00;
+    margin-bottom:4px;
+  }
+
+  /* PROMPT BLOCK */
+  .prompt-box{
+    position:relative;
+    background:#211E33;
+    color:#F1F0FA;
+    border-radius:14px;
+    padding:16px 16px 50px;
+    margin-top:6px;
+    font-size:13px;
+    line-height:1.6;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .prompt-label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:#B9B3F5;
+    font-weight:700;
+    margin-bottom:10px;
+    display:block;
+  }
+  .copy-btn{
+    position:absolute;
+    left:16px;
+    bottom:14px;
+    background:var(--yellow);
+    color:#3A2A00;
+    border:none;
+    font-weight:700;
+    font-size:13px;
+    padding:9px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    transition:transform .12s ease, background .2s ease;
+  }
+  .copy-btn:active{
+    transform:scale(.96);
+  }
+  .copy-btn.copied{
+    background:#4FD1A5;
+    color:#073626;
+  }
+
+  .fill{color:var(--yellow);font-weight:700;}
+
+  /* FOOTER OF STEP */
+  .next-box{
+    margin-top:14px;
+    font-size:13.5px;
+    color:var(--text-soft);
+  }
+  .next-box b{color:var(--text);}
+
+  /* CHECKLIST */
+  .checklist{
+    margin-top:6px;
+  }
+  .check-item{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    background:var(--card-green);
+    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:8px;
+    cursor:pointer;
+    user-select:none;
+    transition:background .15s ease, opacity .15s ease;
+  }
+  .check-item.checked{
+    background:#DCEFE5;
+    opacity:.65;
+  }
+  .check-item.checked span.txt{
+    text-decoration:line-through;
+  }
+  .box{
+    flex:none;
+    width:22px;
+    height:22px;
+    border-radius:7px;
+    border:2px solid #1F8E63;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    color:#1F8E63;
+    font-weight:900;
+  }
+  .check-item span.txt{
+    font-size:13.5px;
+    color:var(--text);
+    padding-top:1px;
+  }
+
+  /* FEEDBACK */
+  .feedback-box{
+    background:var(--card-pink);
+    border-radius:14px;
+    padding:16px;
+    margin-top:4px;
+  }
+  .feedback-box b.ttl{
+    display:block;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:#B23E72;
+    margin-bottom:10px;
+  }
+  .feedback-box ol{
+    margin:0;
+    padding-left:18px;
+    font-size:13.5px;
+    color:var(--text);
+  }
+  .feedback-box li{margin-bottom:6px;}
+  .feedback-box li:last-child{margin-bottom:0;}
+
+  .save-note{
+    margin:24px 20px 0;
+    text-align:center;
+    font-size:13.5px;
+    color:var(--text-soft);
+    padding:0 10px;
+  }
+
+  footer.page-footer{
+    margin-top:36px;
+    text-align:center;
+    font-size:11.5px;
+    color:#B3AFC9;
+    letter-spacing:.03em;
+    padding:0 24px;
+  }
+
+  @media (max-width:360px){
+    .hero h1{font-size:24px;}
+    .flow{flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="eyebrow">Нейро-блокнот · практический гайд</span>
+    <h1>Как получить <span class="hl">10 идей для блога</span> с помощью нейросети</h1>
+    <p>Пошаговая инструкция: от пустого листа до темы, из которой можно сделать пост.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step"><b>Тема</b><span>о чём твой блог</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><b>10 идей</b><span>выбираешь лучшую</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><b>Черновик</b><span>дорабатываешь под себя</span></div>
+  </div>
+
+  <div class="need-box">
+    <b>Тебе понадобится</b>
+    10–15 минут · любая нейросеть для текста · тема твоего блога
+  </div>
+
+  <p class="intro-text">Не нужно ждать вдохновения. Начни с понятного запроса — и выбери то, что действительно подходит твоей аудитории.</p>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <div class="step-title">
+        <h2>Дай нейросети контекст</h2>
+        <p>Чем точнее вводные, тем полезнее будут идеи</p>
+      </div>
+    </div>
+    <p class="body">Перед тем как просить идеи, объясни нейросети, о чём твой блог и для кого ты пишешь.</p>
+
+    <h3 class="sub">Заполни три строки</h3>
+    <div class="field"><b>Тема блога</b><span>Например: выпечка, психология, рукоделие, продвижение</span></div>
+    <div class="field"><b>Для кого</b><span>Кто твои читатели? Что для них важно?</span></div>
+    <div class="field"><b>Что им нужно</b><span>Какие вопросы, трудности или желания у них есть?</span></div>
+
+    <div class="example">
+      <b class="label">Пример заполнения</b>
+      <div class="line"><b>Тема:</b> домашняя выпечка</div>
+      <div class="line"><b>Читатели:</b> люди, которые пекут дома для семьи</div>
+      <div class="line"><b>Что им нужно:</b> простые рецепты, чтобы выпечка получалась с первого раза</div>
+    </div>
+
+    <div class="tip">
+      <b>Подсказка</b>
+      Не старайся описать всё идеально. Достаточно нескольких конкретных фраз.
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <div class="step-title">
+        <h2>Получи 10 идей</h2>
+        <p>Скопируй запрос, замени слова в скобках и отправь нейросети</p>
+      </div>
+    </div>
+
+    <div class="prompt-box" id="prompt1">
+      <span class="prompt-label">Скопируй этот промпт</span>Ты — редактор блога и специалист по контенту.
+
+Помоги мне придумать 10 конкретных тем для публикаций.
+
+Тема моего блога: <span class="fill">[впиши тему]</span>
+Моя аудитория: <span class="fill">[опиши читателей]</span>
+Их вопросы и трудности: <span class="fill">[перечисли 2–3 пункта]</span>
+
+Для каждой темы напиши:
+1. Заголовок, который заинтересует читателя.
+2. Главную мысль поста — одним предложением.
+
+Не предлагай общие темы вроде «полезные советы». Нужны конкретные идеи, которые можно раскрыть в одной публикации. Пиши простым языком.
+      <button class="copy-btn" onclick="copyPrompt('prompt1', this)">📋 Скопировать</button>
+    </div>
+
+    <div class="example">
+      <b class="label">Пример: вместо «поговорим о выпечке»</b>
+      <div class="line">«Почему бисквит оседает после духовки: 3 частые ошибки и как их избежать»</div>
+    </div>
+
+    <div class="next-box">
+      <b>Что делать дальше.</b> Прочитай все 10 вариантов и отметь те, о которых тебе самой хочется рассказать. Выбирай не самую модную тему, а ту, которая полезна твоим читателям и близка тебе.
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <div class="step-title">
+        <h2>Преврати идею в пост</h2>
+        <p>Не начинай с чистого листа — попроси нейросеть собрать черновик</p>
+      </div>
+    </div>
+
+    <div class="prompt-box" id="prompt2">
+      <span class="prompt-label">Скопируй этот промпт</span>Напиши черновик поста на тему: <span class="fill">[вставь выбранную идею]</span>.
+
+Моя аудитория: <span class="fill">[кто читатели]</span>.
+Цель поста: <span class="fill">[объяснить / помочь / вовлечь / поделиться опытом]</span>.
+
+Построй текст так:
+1. Начни с узнаваемой ситуации или цепляющей мысли.
+2. Покажи проблему, с которой сталкивается читатель.
+3. Дай 2–3 полезных совета или объяснения.
+4. Приведи короткий пример, если он уместен.
+5. Заверши выводом или простым вопросом читателю.
+
+Пиши естественно, без канцелярита, громких обещаний и избитых фраз. Не выдумывай мой личный опыт. Если информации не хватает — задай вопросы.
+      <button class="copy-btn" onclick="copyPrompt('prompt2', this)">📋 Скопировать</button>
+    </div>
+
+    <div class="example">
+      <b class="label">Пример начала поста</b>
+      <div class="line">«Бисквит красиво поднялся в духовке, а через пять минут осел? Не спеши винить рецепт. Часто дело в одной из трёх ошибок…»</div>
+    </div>
+
+    <div class="tip">
+      <b>Важно</b>
+      Черновик — это заготовка, а не текст, который нужно публиковать без изменений. Добавь свои примеры, проверь факты и убери то, что звучит не по-твоему.
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">4</div>
+      <div class="step-title">
+        <h2>Доведи текст до своего голоса</h2>
+        <p>Нейросеть помогает, но последнее слово — за тобой</p>
+      </div>
+    </div>
+    <p class="body">Если черновик получился слишком общим, не переписывай всё с нуля. Дай уточняющий запрос.</p>
+
+    <div class="prompt-box" id="prompt3">
+      <span class="prompt-label">Запрос для доработки</span>Улучши этот текст.
+
+Сделай начало более конкретным и живым. Убери повторы и общие фразы. Добавь практическую пользу, но не придумывай факты. Сохрани простой, естественный тон и смысл. Если можно сделать текст понятнее — предложи улучшенный вариант.
+      <button class="copy-btn" onclick="copyPrompt('prompt3', this)">📋 Скопировать</button>
+    </div>
+
+    <h3 class="sub">Проверь перед публикацией</h3>
+    <div class="checklist">
+      <div class="check-item" onclick="toggleCheck(this)"><div class="box"></div><span class="txt">Тема интересна моей аудитории?</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="box"></div><span class="txt">В тексте есть конкретная польза, а не общие слова?</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="box"></div><span class="txt">Он звучит естественно и похоже на меня?</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="box"></div><span class="txt">Я проверила факты и убрала то, чего не могу подтвердить?</span></div>
+    </div>
+
+    <h3 class="sub">Помоги сделать гайд лучше</h3>
+    <div class="feedback-box">
+      <b class="ttl">Ответь, пожалуйста, на несколько вопросов</b>
+      <ol>
+        <li>Получилось ли получить подходящие идеи?</li>
+        <li>Что было непонятно или неудобно?</li>
+        <li>Чего не хватило, чтобы сразу использовать одну из тем?</li>
+        <li>Хотел(а) бы ты получить более подробный способ планировать контент с помощью нейросети?</li>
+      </ol>
+    </div>
+  </div>
+
+  <p class="save-note">Сохрани этот гайд — в следующий раз, когда идеи закончатся, просто пройди шаги ещё раз.</p>
+
+  <footer class="page-footer">НЕЙРО-БЛОКНОТ · ПРАКТИКУМ ПО СОЗДАНИЮ КОНТЕНТА</footer>
+
+</div>
+
+<script>
+function copyPrompt(id, btn){
+  const el = document.getElementById(id);
+  const clone = el.cloneNode(true);
+  clone.querySelectorAll('.copy-btn, .prompt-label').forEach(n => n.remove());
+  const text = clone.innerText.trim();
+  const done = () => {
+    const original = btn.innerHTML;
+    btn.innerHTML = '✓ Скопировано';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = original; btn.classList.remove('copied'); }, 1800);
+  };
+  const fail = () => promptCopy(text);
+
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done).catch(() => iosCopy(text, done, fail));
+  } else {
+    iosCopy(text, done, fail);
+  }
+}
+// Копирование через execCommand с выделением через Range/Selection — так работает в Safari на iPhone,
+// в отличие от textarea.select(), который там часто не срабатывает на элементе за пределами экрана.
+function iosCopy(text, done, fail){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.readOnly = true;
+  ta.contentEditable = true;
+  ta.style.position = 'absolute';
+  ta.style.top = '0';
+  ta.style.left = '0';
+  ta.style.fontSize = '16px';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+
+  const range = document.createRange();
+  range.selectNodeContents(ta);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  ta.setSelectionRange(0, text.length);
+
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
+  document.body.removeChild(ta);
+
+  if(ok){ done(); } else { fail(); }
+}
+// Последний рубеж: если copy вообще заблокирован (например файл открыт во встроенном
+// просмотрщике Telegram без полноценного JS), показываем текст в окне — его можно
+// выделить и скопировать вручную даже там, где execCommand недоступен.
+function promptCopy(text){
+  window.prompt('Не удалось скопировать автоматически. Выдели текст ниже и скопируй вручную (зажми и выбери «Копировать»):', text);
+}
+function toggleCheck(item){
+  item.classList.toggle('checked');
+  item.querySelector('.box').textContent = item.classList.contains('checked') ? '✓' : '';
+}
+</script>
+
+</body>
+</html>
