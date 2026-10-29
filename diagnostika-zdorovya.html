@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест: диагностика здоровья — узнай за 3 минуты</title>
+<meta name="description" content="Пройди тест за 3 минуты и узнай, каким системам организма сейчас не хватает внимания — без регистрации, результат сразу.">
+<meta property="og:title" content="Тест: диагностика своего здоровья">
+<meta property="og:description" content="Пройди тест за 3 минуты и узнай, каким системам организма сейчас не хватает внимания.">
+<meta property="og:type" content="website">
+<style>
+  :root {
+    --bg: #ecdfcd;
+    --card: #fffbf4;
+    --accent: #a97558;
+    --accent2: #cc9a63;
+    --accent-dark: #7c5540;
+    --text: #3a2f26;
+    --muted: #7d6c5a;
+    --border: #e2d2b8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(204,154,99,0.28), transparent 40%),
+      radial-gradient(circle at 88% 12%, rgba(169,117,88,0.20), transparent 42%),
+      radial-gradient(circle at 20% 92%, rgba(169,117,88,0.18), transparent 38%),
+      radial-gradient(circle at 92% 88%, rgba(204,154,99,0.24), transparent 40%),
+      linear-gradient(160deg, #f2e6d3, #e4d2b6 55%, #d9c4a3);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    padding: 24px 12px;
+    min-height: 100vh;
+  }
+  .card {
+    position: relative;
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: 0 10px 34px rgba(124,85,64,0.14), 0 2px 8px rgba(0,0,0,0.04);
+    max-width: 480px;
+    width: 100%;
+    padding: 28px 22px 24px;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent2));
+  }
+  .hero-art {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 4px 0 16px;
+  }
+  .hero-art::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 110px;
+    background: radial-gradient(circle, rgba(204,154,99,0.55), transparent 70%);
+    filter: blur(6px);
+    z-index: 0;
+  }
+  .hero-art svg { position: relative; z-index: 1; }
+  .spark {
+    animation: sparkPulse 2.6s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .spark:nth-child(3) { animation-delay: .3s; }
+  .spark:nth-child(4) { animation-delay: .9s; }
+  .spark:nth-child(5) { animation-delay: .5s; }
+  @keyframes sparkPulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+  .icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f0dcc0, #e8c9a0);
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+  .option.checked .icon-circle {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+  }
+  .step { display: none; }
+  .step.active { display: block; animation: fade 0.25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+
+  h1 { font-size: 1.55rem; line-height: 1.3; margin: 0 0 12px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.25rem; line-height: 1.35; margin: 0 0 14px; letter-spacing: -0.01em; }
+  p { font-size: 0.95rem; line-height: 1.5; color: var(--muted); margin: 0 0 16px; }
+  .badge {
+    display: inline-block;
+    background: #ecdec4;
+    color: var(--accent-dark);
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: border-color .15s, background .15s, box-shadow .15s, transform .15s;
+  }
+  .option:active { background: #f3e6d0; }
+  .option.checked {
+    border-color: var(--accent);
+    background: #f3e6d0;
+    box-shadow: 0 4px 14px rgba(169,117,88,0.20);
+    transform: translateY(-1px);
+  }
+  .option input { margin: 0; accent-color: var(--accent); flex-shrink: 0; }
+  .option-text {
+    flex: 1;
+  }
+
+  .other-input {
+    width: 100%;
+    margin-top: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: #fffaf1;
+    color: var(--text);
+    display: none;
+  }
+  .other-input.visible { display: block; }
+  .other-input:focus { outline: none; border-color: var(--accent); }
+
+  label.field-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+  }
+  input.field-input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    line-height: 1.4;
+    font-family: inherit;
+    margin-bottom: 16px;
+    background: #fffaf1;
+    color: var(--text);
+  }
+  input.field-input:focus { outline: none; border-color: var(--accent); }
+
+  .btn {
+    display: inline-block;
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent), var(--accent2));
+    background-size: 220% auto;
+    background-position: 0% center;
+    box-shadow: 0 4px 14px rgba(169,117,88,0.30);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    animation: btnShimmer 3.5s ease-in-out infinite;
+  }
+  @keyframes btnShimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+  }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; animation: none; }
+  .btn:active:not(:disabled) { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); }
+  .btn.secondary {
+    background: transparent;
+    color: var(--accent-dark);
+    border: 1.5px solid var(--border);
+    margin-top: 10px;
+  }
+  .btn.vk {
+    background: var(--accent-dark);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 14px rgba(124,85,64,0.35);
+    animation: none;
+  }
+  .btn.vk:active { background: #5f4230; }
+
+  .stat-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .stat-chip {
+    flex: 1;
+    text-align: center;
+    background: #f3e6d0;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 6px;
+  }
+  .stat-chip b {
+    display: block;
+    font-size: 1.05rem;
+    color: var(--accent-dark);
+    margin-bottom: 2px;
+  }
+  .stat-chip span {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .progress-wrap {
+    margin-bottom: 18px;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 3px;
+    transition: width .25s ease;
+  }
+
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .result-block {
+    position: relative;
+    background: #f3e6d0;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px 16px 50px;
+    margin-bottom: 16px;
+    font-size: 0.93rem;
+    line-height: 1.6;
+    box-shadow: 0 8px 22px rgba(124,85,64,0.28);
+    opacity: 0;
+    animation: resultPop 0.45s ease forwards;
+  }
+  .result-block:nth-of-type(1) { animation-delay: .05s; }
+  .result-block:nth-of-type(2) { animation-delay: .15s; }
+  .result-block:nth-of-type(3) { animation-delay: .25s; }
+  .result-block:nth-of-type(4) { animation-delay: .35s; }
+  @keyframes resultPop {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .result-block .r-icon {
+    position: absolute;
+    left: 14px;
+    top: 15px;
+    font-size: 1.2rem;
+  }
+  .result-block b { display: block; margin-bottom: 4px; color: var(--accent-dark); }
+  #result-zones div, #result-tips div { margin-bottom: 6px; }
+  #result-zones div:last-child, #result-tips div:last-child { margin-bottom: 0; }
+  .footer-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .author-heading {
+    margin: 18px 0 12px;
+    padding-top: 16px;
+    border-top: 1.5px solid var(--border);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 14px;
+  }
+  .author-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(169,117,88,0.30);
+    overflow: hidden;
+  }
+  .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .author-name { font-weight: 700; margin-bottom: 3px; }
+  .author-bio { font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
+  .author-benefits { margin: 4px 0 16px; }
+  .benefit-item { font-size: 0.88rem; color: var(--text); line-height: 1.5; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ШАГ 0: ОНБОРДИНГ -->
+  <div class="step active" data-step="intro">
+    <div class="hero-art">
+      <svg width="150" height="100" viewBox="0 0 150 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 56H34L42 30L54 78L64 10L74 56H92L100 42L108 56H146" stroke="url(#gPulse)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle class="spark" cx="20" cy="20" r="4" fill="#e8c9a0"/>
+        <circle class="spark" cx="130" cy="74" r="3" fill="#cc9a63" opacity="0.7"/>
+        <circle class="spark" cx="118" cy="22" r="5" fill="#e8c9a0"/>
+        <defs>
+          <linearGradient id="gPulse" x1="4" y1="56" x2="146" y2="56" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#c97b63"/>
+            <stop offset="1" stop-color="#8a5a3f"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <span class="badge">🩺 Проверка состояния организма</span>
+    <h1>Тест: диагностика своего здоровья</h1>
+    <p>Ответь на несколько простых вопросов о себе — и узнаешь, каким системам организма сейчас не хватает внимания и с чего стоит начать.</p>
+    <div class="stat-row">
+      <div class="stat-chip"><b>19</b><span>вопросов</span></div>
+      <div class="stat-chip"><b>3 мин</b><span>на всё</span></div>
+      <div class="stat-chip"><b>0 ₽</b><span>бесплатно</span></div>
+    </div>
+    <button class="btn" onclick="goTo('personal')">Начать проверку</button>
+  </div>
+
+  <!-- ШАГ 1: ИМЯ / ВОЗРАСТ / ВЕС -->
+  <div class="step" data-step="personal">
+    <div class="progress-wrap">
+      <div class="progress-label">Начнём с пары слов о тебе</div>
+      <div class="progress-bar"><div class="progress-bar-fill" style="width:5%"></div></div>
+    </div>
+    <h2>Расскажи немного о себе</h2>
+    <label class="field-label" for="f-name">Ваше имя</label>
+    <input class="field-input" type="text" id="f-name" placeholder="Как вас зовут">
+
+    <label class="field-label" for="f-age">Ваш возраст</label>
+    <input class="field-input" type="number" id="f-age" min="1" max="120" placeholder="лет">
+
+    <label class="field-label" for="f-weight">Ваш вес</label>
+    <input class="field-input" type="number" id="f-weight" min="1" max="300" placeholder="кг">
+
+    <button class="btn" id="btn-personal" disabled onclick="goTo('quiz')">Дальше</button>
+  </div>
+
+  <!-- ШАГ 2: ВОПРОСЫ (рендерятся JS) -->
+  <div class="step" data-step="quiz">
+    <div class="progress-wrap">
+      <div class="progress-label" id="q-progress-label">Вопрос 1 из 19</div>
+      <div class="progress-bar"><div class="progress-bar-fill" id="q-progress-fill" style="width:0%"></div></div>
+    </div>
+    <h2 id="q-text"></h2>
+    <div id="q-options" class="options"></div>
+    <button class="btn" id="btn-next" disabled onclick="nextQuestion()">Дальше</button>
+    <button class="btn secondary" id="btn-back" onclick="prevQuestion()">Назад</button>
+  </div>
+
+  <!-- РЕЗУЛЬТАТ -->
+  <div class="step" data-step="result">
+    <span class="result-badge" id="result-badge"></span>
+    <h2 id="result-title"></h2>
+    <div class="result-block"><span class="r-icon">🧭</span><b>Зоны, которым стоит уделить внимание</b><div id="result-zones"></div></div>
+    <div class="result-block"><span class="r-icon">💡</span><b>Что это может значить</b><div id="result-tips"></div></div>
+    <p class="footer-note">
+      Это общая картина по твоим ответам, а не диагноз и не замена врачу. Если хочешь разобраться, с чего начать именно в твоей ситуации — напиши мне слово «ЗДОРОВЬЕ» в Telegram, бесплатно обсудим.
+    </p>
+    <h3 class="author-heading">Кто я и чем я могу тебе помочь</h3>
+    <div class="author-card">
+      <div class="author-avatar" id="author-avatar"><img src="data:image/jpeg;base64,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" alt="Татьяна Фетисова"></div>
+      <div>
+        <div class="author-name">Татьяна Фетисова</div>
+        <div class="author-bio">20 лет я проработала в аптечном бизнесе. Не понаслышке знаю, какими методами работает традиционная медицина. И как можно, следуя простой пошаговой системе, помочь своему организму восстановиться без лекарств и аптек. По этой методике прошли уже более 8 млн. человек и каждый получил свои результаты. И сейчас я помогаю тем, кто хочет разобраться со своим здоровьем и самочувствием, но не знает, с чего начать. Всё, что показываю, — прошла сама.</div>
+      </div>
+    </div>
+    <div class="author-benefits">
+      <div class="benefit-item">✅ Разберём именно твою ситуацию и твои ответы — не по шаблону</div>
+      <div class="benefit-item">✅ Покажу, с чего можно начать уже сейчас, без лишних трат</div>
+      <div class="benefit-item">✅ Без обязательств, просто поговорим</div>
+    </div>
+    <a class="btn" href="https://t.me/fetisovatatiana" target="_blank" rel="noopener" style="margin-top:6px;">Написать в Telegram →</a>
+    <a class="btn vk" href="https://vk.ru/fetisova74" target="_blank" rel="noopener" style="margin-top:10px;">Написать в ВК →</a>
+  </div>
+
+</div>
+
+<script>
+  // После деплоя Google-таблицы вставь сюда адрес веб-приложения Apps Script
+  // (инструкция — в файле instructions.md)
+  const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxZb4e3Rt2LfX7ruST1DoJLo6WEve0PBFVmKZ-KVL_R78yc49d3deltKsuwzh_UgwgLwA/exec';
+
+  const QUESTIONS = [
+    { key: 'headache', zone: 'nervous', text: 'У вас часто болит голова?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'sleep', zone: 'sleep', text: 'У вас есть проблемы со сном?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'cramps', zone: 'minerals', text: 'Бывают судороги?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'water', zone: 'water', text: 'Сколько чистой воды выпиваете за день (без учёта чая, кофе, компотов, соков, супов и др.)?',
+      options: [
+        {v:'lt1', label:'Меньше 1 л', flag:true},
+        {v:'1.5', label:'1,5 л', flag:true},
+        {v:'lt2', label:'Меньше 2 л', flag:true},
+        {v:'other', label:'Другое', other:true, otherPlaceholder:'сколько литров', otherSuffix:' л'}
+      ] },
+    { key: 'hairloss', zone: 'skinhair', text: 'Замечаете у себя сильное выпадение волос?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'skin', zone: 'skinhair', text: 'Как вы оцениваете состояние кожи?',
+      options: [
+        {v:'normal', label:'Нормальная'},
+        {v:'dry', label:'Сухая', flag:true},
+        {v:'allergy', label:'Иногда проявляется аллергия', flag:true},
+        {v:'atopic', label:'Атопический дерматит', flag:true},
+        {v:'eczema', label:'Экзема', flag:true},
+        {v:'psoriasis', label:'Псориаз', flag:true},
+        {v:'other', label:'Другое', other:true, otherPlaceholder:'опишите', flag:true}
+      ] },
+    { key: 'memory', zone: 'nervous', text: 'Есть ли у вас жалобы на память?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'gi', zone: 'digestion', text: 'Оцените состояние ЖКТ:',
+      options: [
+        {v:'none', label:'Жалоб нет'},
+        {v:'constipation', label:'Частые запоры', flag:true},
+        {v:'loose', label:'Часто жидкий стул', flag:true},
+        {v:'bloating', label:'Вздутие живота, метеоризм', flag:true},
+        {v:'other', label:'Другое', other:true, otherPlaceholder:'опишите', flag:true}
+      ] },
+    { key: 'joints', zone: 'joints', text: 'Есть ли проблемы с суставами?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'vision', zone: 'vision', text: 'Есть ли у вас проблемы со зрением?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'pressure', zone: 'pressure', text: 'Диагностировано ли у вас отклонение от нормального давления?',
+      options: [
+        {v:'high', label:'Высокое давление (гипертония)', flag:true},
+        {v:'low', label:'Низкое давление (гипотония)', flag:true},
+        {v:'normal', label:'Давление в норме'}
+      ] },
+    { key: 'energy', zone: 'energy', text: 'Отмечаете у себя отсутствие энергии, вялость, слабость, быструю утомляемость?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'allergy', zone: 'immune', text: 'Есть ли на что-то аллергия?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'stones', zone: 'detox', text: 'Есть ли у вас камни в жёлчном или почках?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'liver', zone: 'detox', text: 'Есть ли у вас проблемы с печенью?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'colds', zone: 'immune', text: 'Вы часто болеете простудными заболеваниями?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'tinnitus', zone: 'nervous', text: 'Бывает ли у вас шум в ушах или головокружение?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'fungus', zone: 'immune', text: 'Есть ли у вас грибок на пальцах рук или ног?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] },
+    { key: 'thyroid', zone: 'hormones', text: 'Есть проблемы с щитовидкой?',
+      options: [ {v:'yes', label:'Да', flag:true}, {v:'no', label:'Нет'} ] }
+  ];
+
+  const ZONE_LABELS = {
+    nervous: 'Нервная система (головные боли, память, головокружение)',
+    sleep: 'Сон и восстановление',
+    minerals: 'Минеральный баланс',
+    water: 'Водный баланс',
+    skinhair: 'Кожа и волосы',
+    digestion: 'Пищеварение',
+    joints: 'Суставы',
+    vision: 'Зрение',
+    pressure: 'Давление и сосуды',
+    energy: 'Энергия и тонус',
+    immune: 'Иммунитет',
+    detox: 'Печень и почки',
+    hormones: 'Щитовидная железа / гормональный фон'
+  };
+
+  const ZONE_ADVICE = {
+    nervous: 'Частые головные боли, провалы в памяти или шум в ушах чаще всего говорят о накопленной усталости нервной системы и нехватке отдыха.',
+    sleep: 'Проблемы со сном редко живут сами по себе — обычно это сигнал, что организму не хватает ресурса на восстановление днём.',
+    minerals: 'Судороги часто говорят о нехватке микроэлементов — это стоит разобрать отдельно, а не терпеть.',
+    water: 'Воды вы пьёте меньше, чем нужно организму — это напрямую влияет на кожу, энергию и работу почек.',
+    skinhair: 'Состояние кожи и волос — один из первых внешних сигналов о том, что организму не хватает ресурсов внутри.',
+    digestion: 'ЖКТ — это основа усвоения всего остального. Если здесь сбои, любые усилия по здоровью работают хуже.',
+    joints: 'Проблемы с суставами лучше не запускать, а разобраться в причине заранее.',
+    vision: 'Зрение — зона, где лучше действовать на опережение, а не ждать, пока станет хуже.',
+    pressure: 'Скачки давления — повод обратить внимание на сосуды и образ жизни в целом.',
+    energy: 'Хроническая усталость — один из самых частых и самых игнорируемых сигналов организма.',
+    immune: 'Частые простуды, аллергия или грибок — признаки того, что иммунитету сейчас нужна поддержка.',
+    detox: 'Печень и почки — «фильтры» организма, и к ним стоит относиться бережно.',
+    hormones: 'Вопросы с щитовидкой лучше не оставлять без внимания — гормональный фон влияет на всё остальное.'
+  };
+
+  const answers = {};
+  let currentQ = 0;
+
+  function goTo(stepName) {
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.querySelector('.step[data-step="' + stepName + '"]').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  const personalFields = ['f-name', 'f-age', 'f-weight'].map(id => document.getElementById(id));
+  const btnPersonal = document.getElementById('btn-personal');
+  function checkPersonal() {
+    btnPersonal.disabled = !personalFields.every(el => el.value.trim().length > 0);
+  }
+  personalFields.forEach(el => el.addEventListener('input', checkPersonal));
+
+  function renderQuestion() {
+    const q = QUESTIONS[currentQ];
+    document.getElementById('q-text').textContent = q.text;
+    document.getElementById('q-progress-label').textContent = 'Вопрос ' + (currentQ + 1) + ' из ' + QUESTIONS.length;
+    document.getElementById('q-progress-fill').style.width = Math.round(((currentQ + 1) / QUESTIONS.length) * 100) + '%';
+    document.getElementById('btn-back').style.display = currentQ === 0 ? 'none' : 'block';
+
+    const container = document.getElementById('q-options');
+    container.innerHTML = q.options.map((opt, i) => `
+      <label class="option" data-value="${opt.v}">
+        <input type="radio" name="q-${q.key}" value="${opt.v}">
+        <span class="icon-circle">${i + 1}</span>
+        <span class="option-text">${opt.label}</span>
+      </label>
+      ${opt.other ? `<input type="text" class="other-input" data-for="${opt.v}" placeholder="${opt.otherPlaceholder || 'уточните'}">` : ''}
+    `).join('');
+
+    const btnNext = document.getElementById('btn-next');
+    btnNext.disabled = true;
+
+    const savedAnswer = answers[q.key];
+
+    container.querySelectorAll('.option').forEach(optEl => {
+      optEl.addEventListener('click', () => {
+        container.querySelectorAll('.option').forEach(o => o.classList.remove('checked'));
+        optEl.classList.add('checked');
+        optEl.querySelector('input').checked = true;
+        container.querySelectorAll('.other-input').forEach(inp => inp.classList.remove('visible'));
+        const otherInput = container.querySelector('.other-input[data-for="' + optEl.dataset.value + '"]');
+        if (otherInput) {
+          otherInput.classList.add('visible');
+          btnNext.disabled = otherInput.value.trim().length === 0;
+        } else {
+          btnNext.disabled = false;
+        }
+      });
+    });
+
+    container.querySelectorAll('.other-input').forEach(inp => {
+      inp.addEventListener('input', () => { btnNext.disabled = inp.value.trim().length === 0; });
+      inp.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    if (savedAnswer) {
+      const optEl = container.querySelector('.option[data-value="' + savedAnswer.value + '"]');
+      if (optEl) {
+        optEl.classList.add('checked');
+        optEl.querySelector('input').checked = true;
+        const otherInput = container.querySelector('.other-input[data-for="' + savedAnswer.value + '"]');
+        if (otherInput) {
+          otherInput.classList.add('visible');
+          otherInput.value = savedAnswer.otherText || '';
+        }
+        btnNext.disabled = false;
+      }
+    }
+  }
+
+  function saveCurrentAnswer() {
+    const q = QUESTIONS[currentQ];
+    const container = document.getElementById('q-options');
+    const checked = container.querySelector('input[type="radio"]:checked');
+    if (!checked) return false;
+    const opt = q.options.find(o => o.v === checked.value);
+    let otherText = '';
+    if (opt.other) {
+      const otherInput = container.querySelector('.other-input[data-for="' + opt.v + '"]');
+      otherText = otherInput ? otherInput.value.trim() : '';
+      if (!otherText) return false;
+    }
+    let flag = !!opt.flag;
+    if (q.key === 'water' && opt.v === 'other') {
+      const num = parseFloat(otherText.replace(',', '.'));
+      flag = !isNaN(num) && num < 2;
+    }
+    answers[q.key] = { key: q.key, value: opt.v, label: opt.label, otherText: otherText, flag: flag, zone: q.zone };
+    return true;
+  }
+
+  function nextQuestion() {
+    if (!saveCurrentAnswer()) return;
+    if (currentQ < QUESTIONS.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function prevQuestion() {
+    if (currentQ === 0) {
+      goTo('personal');
+      return;
+    }
+    currentQ--;
+    renderQuestion();
+  }
+
+  function buildAnswerText(a) {
+    if (!a) return '';
+    if (a.otherText) return a.label + ': ' + a.otherText + (a.key === 'water' ? ' л' : '');
+    return a.label;
+  }
+
+  function showResult() {
+    const zoneCounts = {};
+    QUESTIONS.forEach(q => {
+      const a = answers[q.key];
+      if (a && a.flag) {
+        zoneCounts[a.zone] = (zoneCounts[a.zone] || 0) + 1;
+      }
+    });
+    const totalFlags = QUESTIONS.filter(q => answers[q.key] && answers[q.key].flag).length;
+
+    const sortedZones = Object.keys(zoneCounts).sort((a, b) => zoneCounts[b] - zoneCounts[a]);
+    const topZones = sortedZones.slice(0, 3);
+
+    let levelLabel, levelTitle;
+    if (totalFlags <= 2) {
+      levelLabel = '🟢 Хороший тонус';
+      levelTitle = 'В целом организм держится неплохо';
+    } else if (totalFlags <= 6) {
+      levelLabel = '🟡 Есть над чем поработать';
+      levelTitle = 'Несколько систем просят внимания';
+    } else if (totalFlags <= 11)
+    {
+      levelLabel = '🟠 Организм сигналит';
+      levelTitle = 'Несколько систем явно работают с перегрузкой';
+    } else {
+      levelLabel = '🔴 Сигналов много';
+      levelTitle = 'Тело давно просит внимания и поддержки';
+    }
+
+    document.getElementById('result-badge').textContent = levelLabel;
+    document.getElementById('result-title').textContent = levelTitle;
+
+    const zonesHtml = topZones.length > 0
+      ? topZones.map(z => `<div><b style="display:inline;color:var(--text);">${ZONE_LABELS[z]}</b></div>`).join('')
+      : '<div>Явных зон перегрузки не нашлось — отличный результат.</div>';
+    document.getElementById('result-zones').innerHTML = zonesHtml;
+
+    const tipsHtml = topZones.length > 0
+      ? topZones.map(z => `<div>${ZONE_ADVICE[z]}</div>`).join('')
+      : '<div>Продолжай в том же духе — твой организм явно получает достаточно заботы.</div>';
+    document.getElementById('result-tips').innerHTML = tipsHtml;
+
+    sendToSheet(zonesHtml, levelTitle);
+    goTo('result');
+  }
+
+  function sendToSheet(zonesHtml, levelTitle) {
+    if (!SHEET_WEBAPP_URL || SHEET_WEBAPP_URL.indexOf('ВСТАВЬ_СЮДА') === 0) return;
+
+    const payload = {
+      'Дата и время': new Date().toLocaleString('ru-RU'),
+      'Имя': document.getElementById('f-name').value.trim(),
+      'Возраст': document.getElementById('f-age').value.trim(),
+      'Вес': document.getElementById('f-weight').value.trim(),
+      'Головная боль': buildAnswerText(answers.headache),
+      'Сон': buildAnswerText(answers.sleep),
+      'Судороги': buildAnswerText(answers.cramps),
+      'Вода (л/день)': buildAnswerText(answers.water),
+      'Выпадение волос': buildAnswerText(answers.hairloss),
+      'Кожа': buildAnswerText(answers.skin),
+      'Память': buildAnswerText(answers.memory),
+      'ЖКТ': buildAnswerText(answers.gi),
+      'Суставы': buildAnswerText(answers.joints),
+      'Зрение': buildAnswerText(answers.vision),
+      'Давление': buildAnswerText(answers.pressure),
+      'Энергия/утомляемость': buildAnswerText(answers.energy),
+      'Аллергия': buildAnswerText(answers.allergy),
+      'Камни (жёлчный/почки)': buildAnswerText(answers.stones),
+      'Печень': buildAnswerText(answers.liver),
+      'Частые простуды': buildAnswerText(answers.colds),
+      'Шум в ушах/головокружение': buildAnswerText(answers.tinnitus),
+      'Грибок': buildAnswerText(answers.fungus),
+      'Щитовидка': buildAnswerText(answers.thyroid),
+      'Зоны внимания': zonesHtml.replace(/<[^>]+>/g, '').trim() || '—',
+      'Итоговый вывод': levelTitle
+    };
+
+    fetch(SHEET_WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
+
+  renderQuestion();
+</script>
+
+</body>
+</html>
