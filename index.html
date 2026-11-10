@@ -319,7 +319,7 @@
       • какая модель заработка с ИИ подойдёт тебе лучше всего<br>
       • что можно протестировать уже за 3 дня, чтобы получить первых клиентов или первые деньги
     </p>
-    <button class="btn" onclick="goToStep(1)">Начать</button>
+    <button class="btn" onclick="if(window.ym)ym(114173003,'reachGoal','quiz_start');goToStep(1)">Начать</button>
   </div>
 
   <!-- ШАГ 1: ОТКРЫТЫЕ ВОПРОСЫ О СЕБЕ -->
@@ -423,7 +423,7 @@
       <div class="benefit-item">✅ Покажу, как применить то, что у тебя уже есть, уже сейчас</div>
       <div class="benefit-item">✅ Расскажу про формат, где твой опыт может приносить доход — без обязательств, просто поговорим</div>
     </div>
-    <a class="btn" data-goatcounter-click="quiz-result-telegram" href="https://t.me/fetisovatatiana" target="_blank" rel="noopener" style="margin-top:6px;">Написать в Telegram →</a>
+    <a class="btn" onclick="ym(114173003,'reachGoal','telegram_click')" href="https://t.me/fetisovatatiana" target="_blank" rel="noopener" style="margin-top:6px;">Написать в Telegram →</a>
   </div>
 
 </div>
@@ -645,12 +645,20 @@
     document.getElementById('result-clients').textContent = p.clients;
     document.getElementById('result-plan').innerHTML = p.plan.map(step => `<div>${step}</div>`).join('');
     document.getElementById('result-timenote').textContent = TIME_NOTE[answers.time];
+    if (window.ym) ym(114173003,'reachGoal','quiz_result');
     goToStep(6);
   }
 </script>
 
-<script data-goatcounter="https://quiz.159-194-202-64.sslip.io/count"
-        async src="https://quiz.159-194-202-64.sslip.io/count.js"></script>
+<script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();
+   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+   ym(114173003, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114173003" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
 </body>
 </html>
